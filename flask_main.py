@@ -87,7 +87,7 @@ def displayEvents():
       response = gcal_service.events().list(
                       calendarId=selected,
                       timeMin=flask.session['begin_date'],
-                      timeMax=flask.session['end_date']
+                      timeMax=next_day(flask.session['end_date'])
                       ).execute()["items"]
       events = events + format_events(response)
 
