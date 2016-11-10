@@ -73,7 +73,9 @@
 
   <script>
       $(function() {
-        $('input[class="col-sm-2 time"]').timepicker({ 'scrollDefault': 'now' });
+        $('input[class="col-sm-2 time"]').timepicker(
+        { 'scrollDefault': 'now', 
+          'orientation': 'bl' });
 
         $('input[name="daterange"]').daterangepicker(
         {   ranges: {
