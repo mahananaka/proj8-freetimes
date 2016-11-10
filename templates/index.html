@@ -81,7 +81,7 @@
       </div>
     </div>
 
-  <script>
+  <script type="text/javascript">
       $(function() {
         $('input[name*="time"]').timepicker(
         { 'scrollDefault': 'now', 
@@ -103,7 +103,7 @@
       });
   </script>
 
-<br /><input type="submit" value="Set date and time range" />
+<br /><input type="submit" onsubmit="validateForm()" value="Set date and time range" />
 </form>
 
     <!--
@@ -127,7 +127,20 @@
   <input type="submit" value="Get schedule for these calendars">
 {% endif %}
 </form>
-    
+<script type="text/javascript">
+  function validateForm(){
+    var controls = $('input[name+="time"]');
+    var valid = true;
+
+    for each (var input in controls){
+      console.log(input.val());
+        if(input.val() == "")
+            valid = false;
+    }
+
+    return valid;
+  }
+</script>
 
   </div>  <!-- container (for bootstrap) -->
   </body> </html>
