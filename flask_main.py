@@ -91,7 +91,7 @@ def displayEvents():
                       ).execute()["items"]
       events = events + format_events(response)
 
-    sorted_events = sorted(events, key=event_sort_key)
+    sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = events
     app.logger.debug(events)
     return render_template('calendar.html')
