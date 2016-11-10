@@ -359,8 +359,8 @@ def format_events(events):
     result = [ ]
     for e in events:
         if("date" in e["start"]):
-          start = e["start"]["date"]
-          end = e["end"]["date"]
+          start = interpret_date(e["start"]["date"])
+          end = interpret_date(e["end"]["date"])
         else:
           start = e["start"]["dateTime"]
           end = e["start"]["dateTime"]
@@ -376,8 +376,7 @@ def format_events(events):
               "id": e["id"],
               "summary": e["summary"],
               "start": start,
-              "end": end,
-              "show": show
+              "end": end
               })
 
     return result
