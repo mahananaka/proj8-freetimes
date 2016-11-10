@@ -69,25 +69,22 @@
   <h3>End Time</h3>
   <input name="timeend" type="text" class="time" />
   <script>
-        $(function() {
-            $('.timestart').timepicker({ 'scrollDefault': 'now' });
-        });
-    </script>
-  <script type="text/javascript">
-  $(function() {
-  $('input[name="daterange"]').daterangepicker(
-    {    ranges: {
-           'Today': [moment(), moment()],
-           'Tomorrow':[moment().add(1, 'days'),
-                       moment().add(1, 'days')], 
-           'This week':[moment(), moment().endOf('week')],
-           'Next week':[moment().add(7, 'days').startOf('week'),
-                        moment().add(7, 'days').endOf('week')],
-           'This month':[moment(), moment().endOf('month')],
-           'Within two weeks':[moment(),moment().add(15, 'days')]
-        }}
-       );
-    });
+      $(function() {
+        $('.timestart').timepicker({ 'scrollDefault': 'now' });
+
+        $('input[name="daterange"]').daterangepicker(
+        {   ranges: {
+               'Today': [moment(), moment()],
+               'Tomorrow':[moment().add(1, 'days'),
+                           moment().add(1, 'days')], 
+               'This week':[moment(), moment().endOf('week')],
+               'Next week':[moment().add(7, 'days').startOf('week'),
+                            moment().add(7, 'days').endOf('week')],
+               'This month':[moment(), moment().endOf('month')],
+               'Within two weeks':[moment(),moment().add(15, 'days')]
+            }}
+         );
+      });
   </script>
 
 <br /><input type="submit" value="Choose" />
