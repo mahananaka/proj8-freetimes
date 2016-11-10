@@ -63,16 +63,26 @@
 <form action="{{ url_for('displayEvents') }}" method="post">
 {% if g.events is defined  %}
   <div class="row">
-  {% for e in g.events %}
-      <div class="col-md-4">
+    <div class="col-md-4">
+      <ul>
+      {% for e in g.events %}
+        <li>
           <label><input type="checkbox" name="{{ e.id }}"> 
-            {{ e.summary + " " + e.start|fmttime + ", " + e.start|fmtdate }}
+                {{ e.summary + " " + 
+                    e.start|fmttime + " to " +
+                    e.end|fmttime + ", " +
+                    e.start|fmtdate }}
           </label>
-      </div>
-      {% if loop.index is divisibleby 3 %}
-      </div> <div class="row">
-      {% endif %}
-  {% endfor %}
+        </li>
+        {% if loop.index > g.events|length / 2 %}
+          </ul></div></div>
+          <div class="row">
+          <div class="col-md-4">
+          <ul>
+        {% endif %}
+      {% endfor %}
+  </ul>
+  </div>
   </div>
   <input type="submit" value="Ignore">
 {% endif %}
