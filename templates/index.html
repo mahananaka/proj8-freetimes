@@ -132,8 +132,8 @@
     var controls = $('input[name*="time"]');
     var valid = false;
 
-    controls.each(function(input){
-      console.log(input);
+    controls.each(function(i,input){
+      console.log(i + " : " + input);
     });
     // for each (var input in controls) {
     //   console.log(input.val());
