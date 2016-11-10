@@ -77,7 +77,8 @@ def displayCalendar():
     app.logger.debug(request.form)
     for selected in request.form:
       app.logger.debug(selected)
-      #service.calendarList().get(calendarId='selected')
+      cal = service.calendarList().get(calendarId=selected)
+      app.logger.debug(cal)
 
     return render_template('dump_request.html')
 
