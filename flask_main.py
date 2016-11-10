@@ -69,6 +69,7 @@ def choose():
     gcal_service = get_gcal_service(credentials)
     app.logger.debug("Returned from get_gcal_service")
     flask.g.calendars = list_calendars(gcal_service)
+    app.logger.debug(flask.g.calendars)
     return render_template('index.html')
 
 ####
