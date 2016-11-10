@@ -81,11 +81,11 @@ def displayCalendar():
       return flask.redirect(flask.url_for('oauth2callback'))
 
     gcal_service = get_gcal_service(credentials)
-    
+
     for selected in request.form:
       app.logger.debug(selected)
-      cal = gcal_service.calendarList().get(calendarId=selected)
-      app.logger.debug(cal)
+      cal = gcal_service.calendarList().get(calendarId=selected).execute();
+      app.logger.debug(cal.getSummary())
 
     return render_template('dump_request.html')
 
