@@ -220,13 +220,17 @@ def setrange():
     widget.
     """
     app.logger.debug("Entering setrange")  
-    flask.flash("Setrange gave us '{}'".format(
-      request.form.get('daterange')))
+    flask.flash("Updated date and time range")
+
     daterange = request.form.get('daterange')
-    flask.session['daterange'] = daterange
     daterange_parts = daterange.split()
+
+    flask.session['daterange'] = daterange
     flask.session['begin_date'] = interpret_date(daterange_parts[0])
     flask.session['end_date'] = interpret_date(daterange_parts[2])
+    flask.session['start_time'] = interpret_time(request.form.get('starttime'))
+    flask.session['end_time'] = interpret_time(request.form.get('endtime'))
+
     app.logger.debug("Setrange parsed {} - {}  dates as {} - {}".format(
       daterange_parts[0], daterange_parts[1], 
       flask.session['begin_date'], flask.session['end_date']))
@@ -374,7 +378,8 @@ def format_events(events):
               "id": e["id"],
               "summary": e["summary"],
               "start": start,
-              "end": end
+              "end": end,
+              "show": show
               })
 
     return result
