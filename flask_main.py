@@ -75,9 +75,16 @@ def choose():
 @app.route("/display", methods=['POST'])
 def displayCalendar():
     app.logger.debug(request.form)
+    credentials = valid_credentials()
+    if not credentials:
+      app.logger.debug("Redirecting to authorization")
+      return flask.redirect(flask.url_for('oauth2callback'))
+
+    gcal_service = get_gcal_service(credentials)
+    
     for selected in request.form:
       app.logger.debug(selected)
-      cal = service.calendarList().get(calendarId=selected)
+      cal = gcal_service.calendarList().get(calendarId=selected)
       app.logger.debug(cal)
 
     return render_template('dump_request.html')
