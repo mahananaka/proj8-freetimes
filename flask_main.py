@@ -358,12 +358,14 @@ def format_events(events):
     app.logger.debug(events)
     result = [ ]
     for e in events:
-        if("start" in e):
-          start = e["start"]["dateTime"]
-          end = e["end"]["dateTime"]
+        if("date" in e["start"]):
+          start = e["start"]["date"]
+          end = e["end"]["date"]
         else:
-          start = ""
-          end = ""
+          start = e["start"]["datetime"]
+          end = e["start"]["datetime"]
+
+        show = ("transparency" in e) and e["transparency"] != 'transparent'
 
         result.append(
           { "kind": e["kind"],
@@ -371,6 +373,7 @@ def format_events(events):
             "summary": e["summary"],
             "start": start,
             "end": end
+            "show": show
             })
 
     return result
