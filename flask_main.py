@@ -84,7 +84,11 @@ def displayCalendar():
 
     for selected in request.form:
       app.logger.debug(selected)
-      response = gcal_service.events().list(calendarId=selected).execute()["items"]
+      response = gcal_service.events().list(
+                      calendarId=selected,
+                      timeMin=flask.session['begin_date'],
+                      timeMax=flask.session['end_date']
+                      ).execute()["items"]
       events = format_events(response)
       app.logger.debug(events)
       flask.g.events = events
