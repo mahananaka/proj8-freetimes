@@ -132,11 +132,14 @@
     var controls = $('input[name+="time"]');
     var valid = true;
 
-    for each (var input in controls){
+    controls.each(function(input){
       console.log(input.val());
-        if(input.val() == "")
-            valid = false;
-    }
+    });
+    // for each (var input in controls) {
+    //   console.log(input.val());
+    //     if(input.val() == "")
+    //         valid = false;
+    // }
 
     return valid;
   }
