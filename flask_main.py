@@ -87,8 +87,8 @@ def displayCalendar():
       response = gcal_service.events().list(calendarId=selected).execute()["items"]
       events = format_events(response)
       app.logger.debug(events)
-
-    return render_template('dump_request.html')
+      flask.g.events = events
+    return render_template('calendar.html')
 
 ####
 #
