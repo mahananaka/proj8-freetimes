@@ -288,13 +288,13 @@ def interpret_time( text ):
     # on raspberry Pi --- failure is likely due to 32-bit integers on that platform)
 
 
-def interpret_date( text ):
+def interpret_date( text, fmt="MM/DD/YYYY" ):
     """
     Convert text of date to ISO format used internally,
     with the local time zone.
     """
     try:
-      as_arrow = arrow.get(text, "MM/DD/YYYY").replace(
+      as_arrow = arrow.get(text, fmt).replace(
           tzinfo=tz.tzlocal())
     except:
         flask.flash("Date '{}' didn't fit expected format 12/31/2001")
@@ -359,8 +359,8 @@ def format_events(events):
     result = [ ]
     for e in events:
         if("date" in e["start"]):
-          start = interpret_date(e["start"]["date"])
-          end = interpret_date(e["end"]["date"])
+          start = interpret_date(e["start"]["date"],"YYYY-MM-DD")
+          end = interpret_date(e["end"]["date"],"YYYY-MM-DD")
         else:
           start = e["start"]["dateTime"]
           end = e["start"]["dateTime"]
