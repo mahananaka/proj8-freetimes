@@ -65,17 +65,15 @@
     {% endif %}
      class="pull-down">
   <br> 
-  <label class="">Start Time</label>
-  <input class="col-sm-2 time" name="starttime" type="text" >
+  <input class="col-sm-2 time" name="starttime" type="text" placeholder="Start Time">
   <br>
-  <label class="">End Time</label>
-  <input class="col-sm-2 time" name="endtime" type="text" >
+  <input class="col-sm-2 time" name="endtime" type="text" placeholder="Start Time">
 
   <script>
       $(function() {
         $('input[class="col-sm-2 time"]').timepicker(
         { 'scrollDefault': 'now', 
-          'orientation': 'bl' });
+          'orientation': 'br' });
 
         $('input[name="daterange"]').daterangepicker(
         {   ranges: {
