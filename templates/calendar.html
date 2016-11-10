@@ -69,10 +69,8 @@
       {% for e in g.events %}
         <li>
           <label><input type="checkbox" name="{{ e.id }}"> 
-                {{ e.summary + " " + 
-                    e.start|fmttime + " to " +
-                    e.end|fmttime + ", " +
-                    e.start|fmtdate }}
+                <strong>{{ e.summary }}</strong>
+                {{ e.start|fmttime + " to " + e.end|fmttime + ", " + e.start|fmtdate }}
           </label>
         </li>
         {% if loop.index is divisibleby columnLength %}
