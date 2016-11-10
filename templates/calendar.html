@@ -65,6 +65,7 @@
   <div class="row">
     <div class="col-md-4">
       <ul clas="list">
+      {{ g.events|length/2|round}}
       {% for e in g.events %}
         {% if e.show %}
         <li>
@@ -76,7 +77,7 @@
           </label>
         </li>
         {% endif %}
-        {% if loop.index == g.events|length / 2|round %}
+        {% if loop.index == g.events|length/2|round %}
           </ul></div>
           <div class="col-md-4">
           <ul>
