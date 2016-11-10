@@ -70,7 +70,7 @@
   <input name="timeend" type="text" class="time" />
   <script>
       $(function() {
-        $('.timestart').timepicker({ 'scrollDefault': 'now' });
+        $('input[class="time"]').timepicker({ 'scrollDefault': 'now' });
 
         $('input[name="daterange"]').daterangepicker(
         {   ranges: {
