@@ -70,13 +70,13 @@
       <input class="input small" name="starttime" type="text">
     </div>
     <div class="control-group">
-      <label class="control-label" for="endtime">Start Time</label>
-      <input class="input small" name="endtime" type="text" placeholder="Start Time">
+      <label class="control-label" for="endtime">End Time</label>
+      <input class="input small" name="endtime" type="text">
     </div>
 
   <script>
       $(function() {
-        $('input[class="col-sm-2 time"]').timepicker(
+        $('input[name*="time"]').timepicker(
         { 'scrollDefault': 'now', 
           'orientation': 'br' });
 
