@@ -353,11 +353,11 @@ def format_events(events):
     result = [ ]
     for e in events:
         result.append(
-          { "kind": e["kind"],
-            "id": e["id"],
-            "summary": e["summary"],
-            "start": e["start"]["datetime"],
-            "end": e["end"]["datetime"]
+          { "kind": e.kind,
+            "id": e.id,
+            "summary": e.summary,
+            "start": e.start.dateTime,
+            "end": e.end.dateTime
             })
     return result.sort(key=lambda r: r.start)
 
