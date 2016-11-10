@@ -67,8 +67,6 @@
       <ul class="list-unstyled">
       {% set columnLength = (g.events|length/3)|round(0,'ceil') %}
       {% for e in g.events %}
-
-        {% if e.show %}
         <li>
           <label><input type="checkbox" name="{{ e.id }}"> 
                 {{ e.summary + " " + 
@@ -77,7 +75,6 @@
                     e.start|fmtdate }}
           </label>
         </li>
-        {% endif %}
         {% if loop.index is divisibleby columnLength %}
           </ul></div>
           <div class="col-md-4">
