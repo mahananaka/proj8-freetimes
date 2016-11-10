@@ -129,7 +129,7 @@
 </form>
 <script type="text/javascript">
   function validateForm(){
-    var controls = $('input[name+="time"]');
+    var controls = $('input[name*="time"]');
     var valid = true;
 
     controls.each(function(input){
