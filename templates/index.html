@@ -57,17 +57,22 @@
 {% endwith %}
 
 
-  <form action="/setrange" method="post">
-  <h3>Date range</h3>
-  <input type="text" name="daterange"
-    {% if session.daterange is defined %}
-         value="{{session.daterange}}"
-    {% endif %}
-     class="pull-down">
-  <br> 
-  <input class="col-sm-2 time" name="starttime" type="text" placeholder="Start Time">
-  <br>
-  <input class="col-sm-2 time" name="endtime" type="text" placeholder="Start Time">
+  <form class="form-horizontal" action="/setrange" method="post">
+    <div class="control-group">
+      <label class="control-label" for="daterange">Date Range</label>
+      <input type="text" name="daterange" class="pull-down"
+        {% if session.daterange is defined %}
+             value="{{session.daterange}}"
+        {% endif %}>
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="starttime">Start Time</label>
+      <input class="input small" name="starttime" type="text">
+    </div>
+    <div class="control-group">
+      <label class="control-label" for="endtime">Start Time</label>
+      <input class="input small" name="endtime" type="text" placeholder="Start Time">
+    </div>
 
   <script>
       $(function() {
