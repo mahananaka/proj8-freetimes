@@ -65,7 +65,9 @@
   <div class="row">
   {% for e in g.events %}
       <div class="col-md-4">
-          <label><input type="checkbox" name="{{ e.id }}"> {{ e.summary + " " + e.start }}</label>
+          <label><input type="checkbox" name="{{ e.id }}"> 
+            {{ e.summary + " " + e.start|format_arrow_date + ", " + e.start|format_arrow_time }}
+          </label>
       </div>
       {% if loop.index is divisibleby 3 %}
       </div> <div class="row">
