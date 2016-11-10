@@ -72,7 +72,7 @@ def choose():
     #app.logger.debug(flask.g.calendars)
     return render_template('index.html')
 
-@app.route("/display", method="POST")
+@app.route("/display", methods=['POST'])
 def displayCalendar():
     app.logger.debug(request.form)
     return render_template('dump_request.html')
