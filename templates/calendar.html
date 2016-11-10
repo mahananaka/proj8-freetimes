@@ -60,12 +60,12 @@
     shown in each row (but the order is across then down; I would
     prefer down then across). 
     -->
-<form action="{{ url_for('displayCalendar') }}" method="post">
+<form action="{{ url_for('displayEvents') }}" method="post">
 {% if g.events is defined  %}
   <div class="row">
   {% for e in g.events %}
       <div class="col-md-4">
-          <label><input type="checkbox" name="{{ e.id }}"> {{ e.summary }}</label>
+          <label><input type="checkbox" name="{{ e.id }}"> {{ e.summary + " " + e.start }}</label>
       </div>
       {% if loop.index is divisibleby 3 %}
       </div> <div class="row">

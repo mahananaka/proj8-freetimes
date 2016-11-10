@@ -73,8 +73,8 @@ def choose():
     return render_template('index.html')
 
 @app.route("/display", methods=['POST'])
-def displayCalendar():
-    app.logger.debug(request.form)
+def displayEvents():
+    app.logger.debug("Entering displayEvents")
     credentials = valid_credentials()
     if not credentials:
       app.logger.debug("Redirecting to authorization")
@@ -83,14 +83,12 @@ def displayCalendar():
     gcal_service = get_gcal_service(credentials)
 
     for selected in request.form:
-      app.logger.debug(selected)
       response = gcal_service.events().list(
                       calendarId=selected,
                       timeMin=flask.session['begin_date'],
                       timeMax=flask.session['end_date']
                       ).execute()["items"]
       events = format_events(response)
-      app.logger.debug(events)
       flask.g.events = events
     return render_template('calendar.html')
 
