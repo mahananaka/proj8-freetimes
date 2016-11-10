@@ -60,7 +60,7 @@
   <form class="form-horizontal" action="/setrange" method="post">
     <div class="control-group">
       <div class="controls">
-        <label class="control-label col-sm-2" for="daterange">Date Range</label>
+        <label class="control-label" for="daterange">Date Range</label>
         <input type="text" name="daterange"
           {% if session.daterange is defined %}
                value="{{session.daterange}}"
@@ -70,13 +70,13 @@
     </div>
     <div class="control-group">
       <div class="controls">
-        <label class="control-label col-sm-2" for="starttime">Start Time</label>
+        <label class="control-label" for="starttime">Start Time</label>
         <input id="starttime" type="text" placeholder="Start Time">
       </div>
     </div>
     <div class="control-group">
       <div class="controls">
-        <label class="control-label col-sm-2" for="endtime">End Time</label>
+        <label class="control-label" for="endtime">End Time</label>
         <input id="endtime" type="text" placeholder="Start Time">
       </div>
     </div>
