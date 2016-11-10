@@ -60,18 +60,24 @@
   <form class="form-horizontal" action="/setrange" method="post">
     <div class="control-group">
       <label class="control-label" for="daterange">Date Range</label>
+      <div class="controls">
       <input type="text" name="daterange" class="pull-down"
         {% if session.daterange is defined %}
              value="{{session.daterange}}"
         {% endif %}>
+      </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="starttime">Start Time</label>
-      <input class="input small" name="starttime" type="text">
+      <div class="controls">
+        <input class="input small" name="starttime" type="text">
+      </div>
     </div>
     <div class="control-group">
       <label class="control-label" for="endtime">End Time</label>
-      <input class="input small" name="endtime" type="text">
+      <div class="controls">
+        <input class="input small" name="endtime" type="text">
+      </div>
     </div>
 
   <script>
