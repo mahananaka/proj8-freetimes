@@ -146,12 +146,12 @@ def oauth2callback():
   """
   app.logger.debug("Entering oauth2callback")
 
-  app.logger.debug("http://localhost:5000" + flask.url_for('oauth2callback'))
-  return_url = "http://localhost:5000" + flask.url_for('oauth2callback')
+  app.logger.debug(flask.url_for('oauth2callback', _external=True)))
+  #return_url = "http://localhost:5000" + flask.url_for('oauth2callback')
   flow =  client.flow_from_clientsecrets(
       CLIENT_SECRET_FILE,
       scope= SCOPES,
-      redirect_uri=return_url)
+      redirect_uri=flask.url_for('oauth2callback', _external=True))
   ## Note we are *not* redirecting above.  We are noting *where*
   ## we will redirect to, which is this function. 
   
