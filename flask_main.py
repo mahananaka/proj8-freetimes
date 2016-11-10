@@ -85,7 +85,7 @@ def displayCalendar():
     for selected in request.form:
       app.logger.debug(selected)
       cal = gcal_service.calendarList().get(calendarId=selected).execute();
-      app.logger.debug(cal.getSummary())
+      app.logger.debug(cal)
 
     return render_template('dump_request.html')
 
