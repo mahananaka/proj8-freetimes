@@ -64,7 +64,7 @@
 {% if g.events is defined  %}
   <div class="row">
     <div class="col-md-4">
-      <ul clas="list">
+      <ul class="list">
       {% for e in g.events %}
         {% if e.show %}
         <li>
@@ -76,7 +76,8 @@
           </label>
         </li>
         {% endif %}
-        {% if loop.index == (g.events|length/2)|round(0,'ceil') %}
+        {% if loop.index == (g.events|length/3)|round(0,'ceil')
+            || loop.index == (g.events|length/3)|round(0,'ceil')*2 %}
           </ul></div>
           <div class="col-md-4">
           <ul>
