@@ -84,8 +84,9 @@ def displayCalendar():
 
     for selected in request.form:
       app.logger.debug(selected)
-      cal = gcal_service.events().list(calendarId=selected).execute()
-      app.logger.debug(cal)
+      response = gcal_service.events().list(calendarId=selected).execute()["items"]
+      events = format_events(response)
+      app.logger.debug(events)
 
     return render_template('dump_request.html')
 
@@ -339,6 +340,26 @@ def list_calendars(service):
             "primary": primary
             })
     return sorted(result, key=cal_sort_key)
+
+def format_events(events):
+    """
+    Given a google 'service' object, return a list of
+    calendars.  Each calendar is represented by a dict.
+    The returned list is sorted to have
+    the primary calendar first, and selected (that is, displayed in
+    Google Calendars web app) calendars before unselected calendars.
+    """
+    app.logger.debug("Entering format_events")  
+    result = [ ]
+    for e in events:
+        result.append(
+          { "kind": e["kind"],
+            "id": e["id"],
+            "summary": e["summary"]
+            "start": e["start"]["datetime"]
+            "end": e["end"]["datetime"]
+            })
+    return result.sort(key=lambda r: r.start)
 
 
 def cal_sort_key( cal ):
