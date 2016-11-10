@@ -367,7 +367,7 @@ def format_events(events):
 
         if("transparency" in e):
           show = (e["transparency"] != 'transparent')
-        else
+        else:
           show = True
 
         if(show):
