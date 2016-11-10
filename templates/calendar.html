@@ -53,35 +53,7 @@
   {% endif %}
 {% endwith %}
 
-<h2>Date range</h2>
-  <form action="/setrange" method="post">
-  <input type="text" name="daterange" size="12"
-    {% if session.daterange is defined %}
-         value="{{session.daterange}}"
-    {% endif %}
-     class="pull-down"
-     style="background: #fff; cursor: pointer; padding: 5px 10px;
-     border: 1px solid #ccc; width: 12em" >
-  <script type="text/javascript">
-  $(function() {
-  $('input[name="daterange"]').daterangepicker(
-    {    ranges: {
-           'Today': [moment(), moment()],
-           'Tomorrow':[moment().add(1, 'days'),
-                       moment().add(1, 'days')], 
-           'This week':[moment(), moment().endOf('week')],
-           'Next week':[moment().add(7, 'days').startOf('week'),
-                        moment().add(7, 'days').endOf('week')],
-           'This month':[moment(), moment().endOf('month')],
-           'Within two weeks':[moment(),moment().add(15, 'days')]
-        }}
-       );
-    });
-  </script>
-
-<br /><input type="submit" value="Choose" />
-</form>
-
+<h2>Calendar Events</h2>
     <!--
     Show the calendar list (if we have it).  This will need to be turned into
     a form from which calendars can be picked. Up to three entries are
@@ -89,18 +61,18 @@
     prefer down then across). 
     -->
 <form action="{{ url_for('displayCalendar') }}" method="post">
-{% if g.calendars is defined  %}
+{% if g.events is defined  %}
   <div class="row">
-  {% for cal in g.calendars if cal.selected %}
+  {% for e in g.events %}
       <div class="col-md-4">
-          <label><input type="radio" name="{{ cal.id }}">{{ cal.summary }}</label>
+          <label><input type="checkbox" name="{{ e.id }}">{{ e.summary }}</label>
       </div>
       {% if loop.index is divisibleby 3 %}
       </div> <div class="row">
       {% endif %}
   {% endfor %}
   </div>
-  <input type="submit" value="Get Calender">
+  <input type="submit" value="Ignore">
 {% endif %}
 </form>
     
