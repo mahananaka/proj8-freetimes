@@ -404,7 +404,7 @@ def event_sort_key( event ):
 def format_arrow_date( date ):
     try: 
         normal = arrow.get( date )
-        return normal.format("ddd MM/DD/YYYY")
+        return normal.format("MMM D")
     except:
         return "(bad date)"
 
@@ -412,7 +412,7 @@ def format_arrow_date( date ):
 def format_arrow_time( time ):
     try:
         normal = arrow.get( time )
-        return normal.format("HH:mm")
+        return normal.format("hh:mm a")
     except:
         return "(bad time)"
     
