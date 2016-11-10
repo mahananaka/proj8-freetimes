@@ -359,7 +359,7 @@ def format_events(events):
             "start": e["start"]["dateTime"],
             "end": e["end"]["dateTime"]
             })
-    return result.sort(key=lambda r: r.start)
+    return result.sort(key=)
 
 
 def cal_sort_key( cal ):
@@ -377,6 +377,19 @@ def cal_sort_key( cal ):
     else:
        primary_key = "X"
     return (primary_key, selected_key, cal["summary"])
+
+def event_sort_key( event ):
+    """
+    Sort key for the list of calendars:  primary calendar first,
+    then other selected calendars, then unselected calendars.
+    (" " sorts before "X", and tuples are compared piecewise)
+    """
+    if event["start"]:
+       start_key = " "
+    else:
+       start_key = "X"
+
+    return (start_key, cal["summary"])
 
 
 #################
