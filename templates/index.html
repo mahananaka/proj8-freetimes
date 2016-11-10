@@ -53,15 +53,23 @@
   {% endif %}
 {% endwith %}
 
-<h2>Date range</h2>
+
   <form action="/setrange" method="post">
-  <input type="text" name="daterange" size="12"
+  <h3>Date range</h3>
+  <input type="text" name="daterange"
     {% if session.daterange is defined %}
          value="{{session.daterange}}"
     {% endif %}
-     class="pull-down"
-     style="background: #fff; cursor: pointer; padding: 5px 10px;
-     border: 1px solid #ccc; width: 12em" >
+     class="pull-down">
+  <h3>Start Time</h3>
+  <input name="timestart" type="text" class="time" />
+  <h3>End Time</h3>
+  <input name="timeend" type="text" class="time" />
+  <script>
+        $(function() {
+            $('.timestart').timepicker({ 'scrollDefault': 'now' });
+        });
+    </script>
   <script type="text/javascript">
   $(function() {
   $('input[name="daterange"]').daterangepicker(
