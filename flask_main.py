@@ -372,7 +372,7 @@ def format_events(events):
             "id": e["id"],
             "summary": e["summary"],
             "start": start,
-            "end": end
+            "end": end,
             "show": show
             })
 
