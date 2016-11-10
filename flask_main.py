@@ -69,7 +69,6 @@ def choose():
     gcal_service = get_gcal_service(credentials)
     app.logger.debug("Returned from get_gcal_service")
     flask.g.calendars = list_calendars(gcal_service)
-    #app.logger.debug(flask.g.calendars)
     return render_template('index.html')
 
 @app.route("/display", methods=['POST'])
@@ -355,7 +354,6 @@ def format_events(events):
     Google Calendars web app) calendars before unselected calendars.
     """
     app.logger.debug("Entering format_events")
-    app.logger.debug(events)
     result = [ ]
     for e in events:
         if("date" in e["start"]):
