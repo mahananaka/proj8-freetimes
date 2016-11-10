@@ -57,7 +57,7 @@
 {% endwith %}
 
 
-  <form class="form-horizontal" action="/setrange" method="post">
+  <form class="form-horizontal" action="/setrange" method="post" onsubmit="return validateForm()">
     <div class="control-group">
       <div class="controls">
         <label class="control-label" for="daterange">Date Range</label>
@@ -103,7 +103,7 @@
       });
   </script>
 
-<br /><input type="submit" onsubmit="validateForm()" value="Set date and time range" />
+<br /><input type="submit" value="Set date and time range" />
 </form>
 
     <!--
