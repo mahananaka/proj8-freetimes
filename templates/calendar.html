@@ -66,6 +66,7 @@
     <div class="col-md-4">
       <ul clas="list">
       {% for e in g.events %}
+        {% if e.transparent %}
         <li>
           <label><input type="checkbox" name="{{ e.id }}"> 
                 {{ e.summary + " " + 
@@ -74,7 +75,8 @@
                     e.start|fmtdate }}
           </label>
         </li>
-        {% if loop.index == g.events|length / 2 %}
+        {% endif %}
+        {% if loop.index == g.events|length / 2|round %}
           </ul></div>
           <div class="col-md-4">
           <ul>

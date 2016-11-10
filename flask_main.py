@@ -93,6 +93,7 @@ def displayEvents():
 
     sorted_events = sorted(events, key=event_sort_key)
     flask.g.events = events
+    app.logger.debug(events)
     return render_template('calendar.html')
 
 ####
@@ -355,7 +356,6 @@ def format_events(events):
     Google Calendars web app) calendars before unselected calendars.
     """
     app.logger.debug("Entering format_events")  
-    app.logger.debug(events)
     result = [ ]
     for e in events:
         if("date" in e["start"]):
