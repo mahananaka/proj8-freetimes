@@ -365,7 +365,10 @@ def format_events(events):
           start = e["start"]["dateTime"]
           end = e["start"]["dateTime"]
 
-        show = ("transparency" in e) and e["transparency"] != 'transparent'
+        # if("transparency" in e):
+        #   show = (e["transparency"] != 'transparent')
+        # else
+          show = True
 
         result.append(
           { "kind": e["kind"],
