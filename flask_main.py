@@ -82,14 +82,17 @@ def displayEvents():
 
     gcal_service = get_gcal_service(credentials)
 
+    events = []
     for selected in request.form:
       response = gcal_service.events().list(
                       calendarId=selected,
                       timeMin=flask.session['begin_date'],
                       timeMax=flask.session['end_date']
                       ).execute()["items"]
-      events = format_events(response)
-      flask.g.events = events
+      events = events + format_events(response)
+
+    sorted_events = sorted(events, key=event_sort_key)
+    flask.g.events = events
     return render_template('calendar.html')
 
 ####
@@ -352,16 +355,25 @@ def format_events(events):
     Google Calendars web app) calendars before unselected calendars.
     """
     app.logger.debug("Entering format_events")  
+    app.logger.debug(events)
     result = [ ]
     for e in events:
+        if("start" in e):
+          start = e["start"]["dateTime"]
+          end = e["end"]["dateTime"]
+        else:
+          start = ""
+          end = ""
+
         result.append(
           { "kind": e["kind"],
             "id": e["id"],
             "summary": e["summary"],
-            "start": e["start"]["dateTime"],
-            "end": e["end"]["dateTime"]
+            "start": start,
+            "end": end
             })
-    return sorted(result, key=event_sort_key)
+
+    return result
 
 
 def cal_sort_key( cal ):
