@@ -389,7 +389,7 @@ def event_sort_key( event ):
     else:
        start_key = "X"
 
-    return (start_key, cal["summary"])
+    return (start_key, event["summary"])
 
 
 #################
