@@ -146,7 +146,7 @@ def oauth2callback():
   """
   app.logger.debug("Entering oauth2callback")
 
-  app.logger.debug(flask.url_for('oauth2callback', _external=True)))
+  app.logger.debug(flask.url_for('oauth2callback', _external=True))
   #return_url = "http://localhost:5000" + flask.url_for('oauth2callback')
   flow =  client.flow_from_clientsecrets(
       CLIENT_SECRET_FILE,
