@@ -75,6 +75,10 @@ def choose():
 @app.route("/display", methods=['POST'])
 def displayCalendar():
     app.logger.debug(request.form)
+    for selected in request.form:
+      app.logger.debug(selected)
+      #service.calendarList().get(calendarId='selected')
+
     return render_template('dump_request.html')
 
 ####
