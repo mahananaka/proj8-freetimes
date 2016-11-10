@@ -362,8 +362,8 @@ def format_events(events):
           start = e["start"]["date"]
           end = e["end"]["date"]
         else:
-          start = e["start"]["datetime"]
-          end = e["start"]["datetime"]
+          start = e["start"]["dateTime"]
+          end = e["start"]["dateTime"]
 
         show = ("transparency" in e) and e["transparency"] != 'transparent'
 
