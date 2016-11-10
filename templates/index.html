@@ -66,14 +66,14 @@
      class="pull-down">
   <br> 
   <label class="">Start Time</label>
-  <input class="form-control time" name="starttime" type="text" >
+  <input class="col-sm-2 time" name="starttime" type="text" >
   <br>
   <label class="">End Time</label>
-  <input class="form-control time" name="endtime" type="text" >
+  <input class="col-sm-2 time" name="endtime" type="text" >
 
   <script>
       $(function() {
-        $('input[class="form-control time"]').timepicker({ 'scrollDefault': 'now' });
+        $('input[class="col-sm-2 time"]').timepicker({ 'scrollDefault': 'now' });
 
         $('input[name="daterange"]').daterangepicker(
         {   ranges: {
