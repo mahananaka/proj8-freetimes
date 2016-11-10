@@ -64,7 +64,7 @@
 {% if g.events is defined  %}
   <div class="row">
     <div class="col-md-4">
-      <ul class="list">
+      <ul class="list-unstyled">
       {% set columnLength = (g.events|length/3)|round(0,'ceil') %}
       {% for e in g.events %}
 
