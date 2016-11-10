@@ -68,7 +68,7 @@
       {% set columnLength = (g.events|length/3)|round(0,'ceil') %}
       {% for e in g.events %}
         <li>
-          <label><input type="checkbox" name="{{ e.id }}" value="checked"> 
+          <label><input type="checkbox" name="{{ e.id }}" checked> 
                 <strong>{{ e.summary }}</strong>
                 {{ e.start|fmttime + " to " + e.end|fmttime + ", " + e.start|fmtdate }}
           </label>
