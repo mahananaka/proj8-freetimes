@@ -64,8 +64,8 @@
          value="{{session.daterange}}"
     {% endif %}
      class="pull-down">
-  <h4>Start Time</h4><input name="timestart" type="text" class="time" />
-  <h4>End Time</h4><input name="timeend" type="text" class="time" />
+  <label class="col-sm-2 control-label">Start Time</label><input name="timestart" type="text" class="time" />
+  <label class="col-sm-2 control-label">End Time</label><input name="timeend" type="text" class="time" />
   <script>
       $(function() {
         $('input[class="time"]').timepicker({ 'scrollDefault': 'now' });
