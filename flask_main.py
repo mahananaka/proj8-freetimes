@@ -145,7 +145,8 @@ def oauth2callback():
   and so on.
   """
   app.logger.debug("Entering oauth2callback")
-  app.logger.debug("uri:" + flask.url_for('oauth2callback', _external=True))
+  app.config['SERVER_NAME'] = 'localhost:5000'
+  app.logger.debug(url_for('oauth2callback', _external=True))
   flow =  client.flow_from_clientsecrets(
       CLIENT_SECRET_FILE,
       scope= SCOPES,
@@ -367,5 +368,5 @@ if __name__ == "__main__":
   # App is created above so that it will
   # exist whether this is 'main' or not
   # (e.g., if we are running under green unicorn)
-  app.run(port=CONFIG.PORT,host="localhost")
+  app.run(port=CONFIG.PORT,host="0.0.0.0")
     
