@@ -65,12 +65,12 @@
     {% endif %}
      class="pull-down">
   <div class="form-group">
-      <label class="col-sm-2 control-label">Start Time</label>
-      <div class="col-sm-4">
+      <label class="col-sm-1 control-label">Start Time</label>
+      <div class="col-sm-3">
         <input class="form-control time" name="starttime" type="text" >
       </div>
-      <label class="col-sm-2 control-label">Start Time</label>
-      <div class="col-sm-4">
+      <label class="col-sm-1 control-label">Start Time</label>
+      <div class="col-sm-3">
         <input class="form-control time" name="starttime" type="text" >
       </div>
     </div>
@@ -78,7 +78,7 @@
   <label class="col-sm-2 control-label">End Time</label><input name="timeend" type="text" class="time" />
   <script>
       $(function() {
-        $('input[class="time"]').timepicker({ 'scrollDefault': 'now' });
+        $('input[class="form-control time"]').timepicker({ 'scrollDefault': 'now' });
 
         $('input[name="daterange"]').daterangepicker(
         {   ranges: {
