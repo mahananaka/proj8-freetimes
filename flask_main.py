@@ -359,7 +359,7 @@ def format_events(events):
             "start": e["start"]["dateTime"],
             "end": e["end"]["dateTime"]
             })
-    return result.sort(key=)
+    return result.sort(key=event_sort_key)
 
 
 def cal_sort_key( cal ):
