@@ -64,7 +64,7 @@
 {% if g.events is defined  %}
   <div class="row">
     <div class="col-md-4">
-      <ul>
+      <ul clas="list">
       {% for e in g.events %}
         <li>
           <label><input type="checkbox" name="{{ e.id }}"> 
@@ -75,8 +75,7 @@
           </label>
         </li>
         {% if loop.index == g.events|length / 2 %}
-          </ul></div></div>
-          <div class="row">
+          </ul></div>
           <div class="col-md-4">
           <ul>
         {% endif %}
