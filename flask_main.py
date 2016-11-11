@@ -400,7 +400,7 @@ def in_time_frame(startTime, endTime):
     app.logger.debug("lower: {}   upper: {}".format(lowerbound,upperbound))
     app.logger.debug("start: {}   end: {}".format(start,end))
 
-    if(start > lowerbound || end < upperbound)
+    if(start > lowerbound or end < upperbound):
         app.logger.debug("True")
         return True
     else:
