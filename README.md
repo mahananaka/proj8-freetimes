@@ -1,55 +1,49 @@
-# proj6-Gcal
-Snarf appointment data from a selection of a user's Google calendars 
+# proj7-Gcal
+First part of the MeetUp term project we are working on.
+
+## Author
+Jared Paeschke, contact me via paeschk@cs.uoregon.edu
 
 ## What is here
 
-I've provided code for the authorization (oauth2) protocol for Google
-calendars.  There is also a picker for a date range. 
+This application is just the first part of the larger MeetUp project we
+are building in 16F CIS322 class.
 
-## What you'll add
+## How to Install
 
-You'll need to read the Google developer documentation to learn how to
-obtain information from the Google Calendar service.
+When writing and testing this program, the test machine was a Raspberry Pi 3 running Raspian Jesse. 
+This is the best sure fire way that the install will go smoothly. However you should have success 
+as long as you have bash and make on your server machine. All but step four is done from command line.
 
-Your application should allow the user to choose calendars (a single
-user may have several Google calendars, one of which is the 'primary'
-calendar) and list 'blocking'  (non-transparent)
-appointments between a start date and an end date
-for some subset of them.
+1. git clone https://github.com/mahananaka/proj7-Gcal.git < install directory >
+2. cd < install directory >
+3. bash ./configure
+4. You will need to create a a folder called secrets. Inside of secrets folder you will need two files
+  * admin_secrets.py which will need 1 line, the quotes must be included.
+    * google_key_file=“secrets/google_client_key.json” //this will point to the second file in secrets
+  * your file with credentials generated with the google api manager
+    * this file is created and downloaded following instructions [here](https://developers.google.com/google-apps/calendar/quickstart/python). Specifically the wizard in Step 1a.
+5. make run
 
-## Hints
+At this point the application should start, and inform you which port it is listening on. You may then
+bring up this app in your preferred browser via http://serverdomain:port/. So if you’re on your dev
+machine and running on port 5000 then the url would be http://localhost:5000/.
 
-You'll need a 'client secret' file of your own.  It should *not* be
-under GIT control.  This is kind of a
-developer key, which you need to obtain from Google.  See
-https://auth0.com/docs/connections/social/google and
-https://developers.google.com/identity/protocols/OAuth2 .
-The applicable scenario for us is 'Web server applications'  (since
-we're doing this in Flask).  
+## Usage
 
-Your client secret will have to be registered for the URLs used for 
-the oauth2 'callback' in the authorization protocol.  This URL includes
-the port on which your application is running, so you you will need to 
-use the same port each time you run your application. You can register 
-the same key for multiple URLs, so for example I have registered mine
-for localhost:5000/oauth2callback, localhost:8000/oauth2callback, 
-roethke.d.cs.uoregon.edu:5000/oauth2callback, and 
-roethke.d.cs.uoregon.edu:8000/oauth2callback. (Roethke is my raspberry Pi
-at school.)  When we test your code, our grader and I will use our own 
-admin_secrets.py and google credentials files, but we will use your 
-client_secrets.py file.  As in the last project, your client_secrets.py
-file should include a reference to your repository and to your name, 
-so that our friendly (but clumsy) robots can use it to install your code. 
+From the main entry page you’ll have options to select a date range and a time range. Defaults are 
+setup but if you wish to change them just click on the fields and a widget will appear for you to
+choose new dates.
 
-I have noticed that getting the list of calendars from Google is very very 
-slow when running on my laptop at home, and snappier when accessing through
-roethke.  I suspect that is because roethke.d.cs.uoregon.edu is is 
-a routable IP address, while "localhost" on my home network requires some
-behind-the-curtains magic from my home router.  I don't know that for sure. 
+After this click the button, the date and time range will be set. Also retrieval of calendar data will begin. You 
+will be redirect to a google page that will inform you of the data that the program wishes to have access to. After
+you allow access then google will return you to the page you were at and now you’ll see that the calendars you have
+are listed. Selected which ones you want to be considered when determining busy times and hit the button below.
 
-Whether or not you already have a Google calendar, it's a good idea to
-create one or two 'test' calendars with a known set of appointments
-for testing.
+Finally you are redirected to an events page which will list all events that are considered to block your time
+and thus are busy times for you.
 
+## Testing
 
-
+Some tests were written for the program. You can see these tests in test_flask_main.py. If you wish to run these tests 
+a recipe in the make file, so from command line simply enter `make test`.
