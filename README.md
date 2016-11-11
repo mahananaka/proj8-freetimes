@@ -45,5 +45,4 @@ and thus are busy times for you.
 
 ## Testing
 
-Some tests were written for the program. You can see these tests in test_flask_main.py. If you wish to run these tests 
-a recipe in the make file, so from command line simply enter `make test`.
+Some tests were written for the program. You can see these tests in test_flask_main.py. If you wish to run these tests using nose, a nosetests recipe exists in the make file. From command line you can type `make test` to do the nosetests.
