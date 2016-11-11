@@ -231,6 +231,8 @@ def setrange():
     flask.session['start_time'] = interpret_time(request.form.get('starttime'))
     flask.session['end_time'] = interpret_time(request.form.get('endtime'))
 
+    app.logger.debug("{},{}".format(flask.session['start_time'],flask.session['end_time']))
+
     app.logger.debug("Setrange parsed {} - {}  dates as {} - {}".format(
       daterange_parts[0], daterange_parts[1], 
       flask.session['begin_date'], flask.session['end_date']))
