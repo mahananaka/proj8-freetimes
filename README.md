@@ -19,8 +19,8 @@ as long as you have bash and make on your server machine. All but step four is d
 2. cd < install directory >
 3. bash ./configure
 4. You will need to create a a folder called secrets. Inside of secrets folder you will need two files
-  * admin_secrets.py which will need 1 line, the quotes must be included.
-    * google_key_file=“secrets/google_client_key.json” //this will point to the second file in secrets
+  * admin_secrets.py which will need 1 line, the quotes must be included. This one line points to the second file.
+    * `google_key_file=“secrets/google_client_key.json”`
   * your file with credentials generated with the google api manager
     * this file is created and downloaded following instructions [here](https://developers.google.com/google-apps/calendar/quickstart/python). Specifically the wizard in Step 1a.
 5. make run
