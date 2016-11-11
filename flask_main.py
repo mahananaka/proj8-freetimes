@@ -372,7 +372,7 @@ def format_events(events):
         else:
           show = True
 
-        if(show and in_time_frame(start,end)):
+        if(show and in_time_frame(e["summary"],start,end)):
           result.append(
             { "kind": e["kind"],
               "id": e["id"],
@@ -384,7 +384,7 @@ def format_events(events):
 
     return result
 
-def in_time_frame(startTime, endTime):
+def in_time_frame(descr, startTime, endTime):
     """
     This function takes a time frame and compares to established
     session time window to see if it matters. We do this because
@@ -397,10 +397,9 @@ def in_time_frame(startTime, endTime):
     start = arrow.get(startTime).to('local').time()
     end = arrow.get(endTime).to('local').time()
 
-    app.logger.debug("lower: {}   upper: {}".format(lowerbound,upperbound))
-    app.logger.debug("start: {}   end: {}".format(start,end))
+    app.logger.debug("summary: {}\nlower: {}   upper: {}\nstart: {}   end: {}".format(descr,lowerbound,upperbound,start,end))
 
-    if(start > lowerbound or end < upperbound):
+    if(end > lowerbound or start < upperbound):
         app.logger.debug("True")
         return True
     else:
