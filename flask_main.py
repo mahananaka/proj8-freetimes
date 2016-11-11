@@ -372,7 +372,7 @@ def format_events(events):
         else:
           show = True
 
-        if(show):
+        if(show and in_time_frame(start,end)):
           result.append(
             { "kind": e["kind"],
               "id": e["id"],
@@ -383,6 +383,24 @@ def format_events(events):
               })
 
     return result
+
+def in_time_frame(startTime, endTime):
+    """
+    This function takes a time frame and compares to established
+    session time window to see if it matters. We do this because
+    the query to the google calendar api grabs everything on the
+    dates in the range and we now filter down to the times that 
+    matter.
+    """
+    lowerbound = arrow.get(flask.session['start_time']).time()
+    upperbound = arrow.get(flask.session['end_time'])
+    start = arrow.get(startTime).time()
+    end = arrow.get(endTime).time()
+
+    app.logger.debug(lowerbound + ", " + upperbound)
+    app.logger.debug(start + ", " + end)
+    return True
+
 
 
 def cal_sort_key( cal ):

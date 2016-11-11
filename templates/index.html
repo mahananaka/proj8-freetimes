@@ -71,13 +71,13 @@
     <div class="control-group">
       <div class="controls">
         <label class="control-label" for="starttime">Start Time</label>
-        <input name="starttime" type="text" placeholder="Click to change">
+        <input name="starttime" type="text" value="9:00am">
       </div>
     </div>
     <div class="control-group">
       <div class="controls">
         <label class="control-label" for="endtime">End Time</label>
-        <input name="endtime" type="text" placeholder="Click to change">
+        <input name="endtime" type="text" value="5:00pm">
       </div>
     </div>
 
@@ -112,6 +112,7 @@
     shown in each row (but the order is across then down; I would
     prefer down then across). 
     -->
+<br><br>
 <form action="{{ url_for('displayEvents') }}" method="post">
 {% if g.calendars is defined  %}
   <div class="row">
