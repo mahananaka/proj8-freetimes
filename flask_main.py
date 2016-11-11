@@ -228,8 +228,8 @@ def setrange():
     flask.session['daterange'] = daterange
     flask.session['begin_date'] = interpret_date(daterange_parts[0])
     flask.session['end_date'] = interpret_date(daterange_parts[2])
-    flask.session['start_time'] = interpret_time(request.form.get('starttime'))
-    flask.session['end_time'] = interpret_time(request.form.get('endtime'))
+    flask.session['start_time'] = interpret_time(request.form.get('starttime'),"h:mma")
+    flask.session['end_time'] = interpret_time(request.form.get('endtime'),"h:mma")
 
     app.logger.debug("{},{}".format(request.form.get('starttime'),request.form.get('endtime')))
     app.logger.debug("{},{}".format(flask.session['start_time'],flask.session['end_time']))
@@ -260,10 +260,10 @@ def init_session_values():
         tomorrow.format("MM/DD/YYYY"),
         nextweek.format("MM/DD/YYYY"))
     # Default time span each day, 8 to 5
-    flask.session["begin_time"] = interpret_time("9am")
-    flask.session["end_time"] = interpret_time("5pm")
+    flask.session["begin_time"] = interpret_time("9am","ha")
+    flask.session["end_time"] = interpret_time("5pm","ha")
 
-def interpret_time( text ):
+def interpret_time( text, time_format ):
     """
     Read time in a human-compatible format and
     interpret as ISO format with local timezone.
@@ -271,10 +271,10 @@ def interpret_time( text ):
     case it will also flash a message explaining accepted formats.
     """
     app.logger.debug("Decoding time '{}'".format(text))
-    time_formats = ["ha", "h:mma",  "h:mm a", "H:mm"]
+    #time_formats = ["ha", "h:mma",  "h:mm a", "H:mm"]
     try:
         app.logger.debug(text)
-        as_arrow = arrow.get(text, time_formats)
+        as_arrow = arrow.get(text, time_format)
         app.logger.debug("{} turned into {}".format(text,as_arrow))
         as_arrow = as_arrow.replace(tzinfo=tz.tzlocal())
         app.logger.debug("Now it is {}".format(as_arrow))
