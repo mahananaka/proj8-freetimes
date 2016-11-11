@@ -392,14 +392,20 @@ def in_time_frame(startTime, endTime):
     dates in the range and we now filter down to the times that 
     matter.
     """
-    lowerbound = arrow.get(flask.session['start_time']).time()
-    upperbound = arrow.get(flask.session['end_time'])
-    start = arrow.get(startTime).time()
-    end = arrow.get(endTime).time()
+    lowerbound = arrow.get(flask.session['start_time']).to(tzinfo=tz.tzlocal()).time()
+    upperbound = arrow.get(flask.session['end_time']).to(tzinfo=tz.tzlocal()).time()
+    start = arrow.get(startTime).to(tzinfo=tz.tzlocal()).time()
+    end = arrow.get(endTime).to(tzinfo=tz.tzlocal()).time()
 
     app.logger.debug("lower: {}   upper: {}".format(lowerbound,upperbound))
     app.logger.debug("start: {}   end: {}".format(start,end))
-    return True
+
+    if(start > lowerbound || end < upperbound)
+        app.logger.debug("True")
+        return True
+    else:
+        app.logger.debug("False")
+        return False
 
 
 
