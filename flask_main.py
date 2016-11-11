@@ -272,8 +272,12 @@ def interpret_time( text ):
     """
     app.logger.debug("Decoding time '{}'".format(text))
     time_formats = ["ha", "h:mma",  "h:mm a", "H:mm"]
-    try: 
-        as_arrow = arrow.get(text, time_formats).replace(tzinfo=tz.tzlocal())
+    try:
+        app.logger.debug(text)
+        as_arrow = arrow.get(text, time_formats)
+        app.logger.debug("{} turned into {}".format(text,as_arrow))
+        as_arrow = as_arrow.replace(tzinfo=tz.tzlocal())
+        app.logger.debug("Now it is {}".format(as_arrow))
         as_arrow = as_arrow.replace(year=2016) #HACK see below
         app.logger.debug("Succeeded interpreting time")
     except:
