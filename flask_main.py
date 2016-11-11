@@ -403,15 +403,23 @@ def in_time_frame(descr, startTime, endTime):
     upperbound = arrow.get(flask.session['end_time']).to('local').time()
     start = arrow.get(startTime).to('local').time()
     end = arrow.get(endTime).to('local').time()
+    retval = False
 
     app.logger.debug("summary: {}\nlower: {}   upper: {}\nstart: {}   end: {}".format(descr,lowerbound,upperbound,start,end))
 
-    if(end > lowerbound or start < upperbound):
-        app.logger.debug("True")
-        return True
-    else:
-        app.logger.debug("False")
-        return False
+    if(start <= lowerbound and end >= lowerbound): #event starts before time-frame but ends after time-frame start
+        retval = True
+
+    if(start >= lowerbound and end <= upperbound): #event starts and ends inside the time-frame
+        retval = True
+
+    if(start <= upperbound and end >= upperbound): #event starts before end of time-frame and continues past it
+        retval = True
+
+    if(start <= lowerbound and end >= upperbound): #event completely overlapse the time-frame
+        retval = True
+          
+    return retval
 
 
 
