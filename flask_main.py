@@ -397,8 +397,8 @@ def in_time_frame(startTime, endTime):
     start = arrow.get(startTime).time()
     end = arrow.get(endTime).time()
 
-    app.logger.debug(lowerbound + ", " + upperbound)
-    app.logger.debug(start + ", " + end)
+    app.logger.debug("lb: {}   ub: {}".format(lowerbound,upperbound))
+    app.logger.debug("lb: {}   ub: {}".format(start,end))
     return True
 
 
