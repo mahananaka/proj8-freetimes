@@ -18,7 +18,7 @@ as long as you have bash and make on your server machine. All but step four is d
 1. git clone https://github.com/mahananaka/proj7-Gcal.git < install directory >
 2. cd < install directory >
 3. bash ./configure
-4. You will need to create a a folder called secrets. Inside of secrets folder you will need two files
+4. You will need to create a folder called secrets. Inside of secrets folder you will need two files
   * admin_secrets.py which will need 1 line, the quotes must be included. This one line points to the second file.
     * `google_key_file=“secrets/google_client_key.json”`
   * your file with credentials generated with the google api manager
