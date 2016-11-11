@@ -130,18 +130,14 @@
 <script type="text/javascript">
   function validateForm(){
     var controls = $('input[name*="time"]');
-    var valid = false;
+    var valid = true;
 
     controls.each(function(){
-      console.log($(this).val());
+      if($(this).val() == "")
+        valid = false;
     });
-    // for each (var input in controls) {
-    //   console.log(input.val());
-    //     if(input.val() == "")
-    //         valid = false;
-    // }
 
-    return false;
+    return valid;
   }
 </script>
 
