@@ -471,7 +471,7 @@ def format_arrow_date( date ):
 def format_arrow_time( time ):
     try:
         normal = arrow.get( time )
-        return normal.format("hh:mma")
+        return normal.format("h:mma")
     except:
         return "(bad time)"
     
