@@ -15,18 +15,22 @@ def test_interpret_time():
     """
     Testing Humanize
     """
-    #curDateTime = arrow.utcnow().to('local')
 
-    #assert humanize_arrow_date(curDateTime) == "Today"
-    #assert humanize_arrow_date(curDateTime.replace(days=+1)) == "Tomorrow"
-    #assert humanize_arrow_date(curDateTime.replace(days=-1)) == "Yesterday"
+    sample = "11:20pm"
+    arw_output = arrow.get(sample,"h:mma").replace(tzinfo=tz.tzlocal(),year=2016).isoformat()
+    assert interpret_time(sample) == arw_output
+    assert interpret_time(sample,"h:mma") == arw_output    
 
 def test_interpret_date():
     """
-    Testing insertion into db
+    Testing intrepret_date funciton
     """
-    #assert insert_memo("02/30/2016","Testing a failed insert") == False
-    #assert insert_memo("11/12/2016","This entry is created by nose") == True
+    sample = "11/15/2016"
+    arw_output = arrow.get(sample,"MM/DD/YYYY").replace(tzinfo=tz.tzlocal()).isoformat()
+
+    assert interpret_date(sample) == arw_output #text default value for format
+    assert interpret_date("2016/11/15","YYYY/MM/DD") == arw_output #test a supplied date format
+    assert interpret_date("15-2016-11","DD-YYYY-MM") == arw_output #test with a very weird date format
 
 def test_in_time_frame():
     """
