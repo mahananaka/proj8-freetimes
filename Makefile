@@ -70,9 +70,6 @@ service:	env
 ## might add test cases that can't be run under 'nose' 
 ##
 test:	env
-	($(INVENV) NOSE_NOCAPTURE=1 nosetests)
-
-testv:	env
 	$(INVENV) nosetests
 
 ##
