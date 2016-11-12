@@ -13,7 +13,7 @@ from flask_main import in_time_frame
 
 def test_interpret_time():
     """
-    Testing Humanize
+    Testing interpret time function
     """
 
     sample = "11:20pm"
@@ -23,7 +23,7 @@ def test_interpret_time():
 
 def test_interpret_date():
     """
-    Testing intrepret_date funciton
+    Testing intrepret_date function
     """
     sample = "11/15/2016"
     arw_output = arrow.get(sample,"MM/DD/YYYY").replace(tzinfo=tz.tzlocal()).isoformat()
@@ -34,14 +34,16 @@ def test_interpret_date():
 
 def test_in_time_frame():
     """
-    Testing memos retrieval
+    Testing in_time_frame function
     """
-    #records = get_memos()
+    fmt = "h:mma"
+    start = interpret_time("11:00am",fmt)
+    end = interpret_time("1:00pm",fmt)
 
-    #assert len(records) > 0 #We inserted in last test so this should not be 0
-
-    #veryify the proper form of the dict
-    #for entry in records:
-    #    assert entry['_id'] is not None
-    #    assert entry['date'] is not None
-    #    assert entry['text'] is not None
+    #Each case of how the time of events call fall around the boundry times provided by user    
+    assert in_time_frame(start,end,interpret_time("10:00am",fmt),interpret_time("10:30am",fmt)) == False
+    assert in_time_frame(start,end,interpret_time("12:00pm",fmt),interpret_time("2:00pm",fmt)) == True
+    assert in_time_frame(start,end,interpret_time("10:00am",fmt),interpret_time("2:00pm",fmt)) == True
+    assert in_time_frame(start,end,interpret_time("10:00am",fmt),interpret_time("12:00pm",fmt)) == True
+    assert in_time_frame(start,end,interpret_time("12:00pm",fmt),interpret_time("12:30pm",fmt)) == True
+    assert in_time_frame(start,end,interpret_time("11:00am",fmt),interpret_time("1:00pm",fmt)) == True

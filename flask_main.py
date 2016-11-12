@@ -375,7 +375,7 @@ def format_events(events):
         else:
           show = True
 
-        if(show and in_time_frame(e["summary"],start,end)):
+        if(show and in_time_frame(start,end,flask.session['start_time'],flask.session['end_time'])):
           result.append(
             { "kind": e["kind"],
               "id": e["id"],
@@ -387,7 +387,7 @@ def format_events(events):
 
     return result
 
-def in_time_frame(descr, startTime, endTime):
+def in_time_frame(startTime, endTime, lowerbound, upperbound):
     """
     This function takes a time frame and compares to established
     session time window to see if it matters. We do this because
@@ -395,24 +395,23 @@ def in_time_frame(descr, startTime, endTime):
     dates in the range and we now filter down to the times that 
     matter.
     """
-    lowerbound = arrow.get(flask.session['start_time']).to('local').time()
-    upperbound = arrow.get(flask.session['end_time']).to('local').time()
+
+    arw_lowerbound = arrow.get(lowerbound).to('local').time()
+    arw_upperbound = arrow.get(upperbound).to('local').time()
     start = arrow.get(startTime).to('local').time()
     end = arrow.get(endTime).to('local').time()
     retval = False
 
-    app.logger.debug("summary: {}\nlower: {}   upper: {}\nstart: {}   end: {}".format(descr,lowerbound,upperbound,start,end))
-
-    if(start <= lowerbound and end >= lowerbound): #event starts before time-frame but ends after time-frame start
+    if(start <= arw_lowerbound and end >= arw_lowerbound): #event starts before time-frame but ends after time-frame start
         retval = True
 
-    if(start >= lowerbound and end <= upperbound): #event starts and ends inside the time-frame
+    if(start >= arw_lowerbound and end <= arw_upperbound): #event starts and ends inside the time-frame
         retval = True
 
-    if(start <= upperbound and end >= upperbound): #event starts before end of time-frame and continues past it
+    if(start <= arw_upperbound and end >= arw_upperbound): #event starts before end of time-frame and continues past it
         retval = True
 
-    if(start <= lowerbound and end >= upperbound): #event completely overlapse the time-frame
+    if(start <= arw_lowerbound and end >= arw_upperbound): #event completely overlapse the time-frame
         retval = True
           
     return retval
@@ -435,18 +434,18 @@ def cal_sort_key( cal ):
        primary_key = "X"
     return (primary_key, selected_key, cal["summary"])
 
-def event_sort_key( event ):
-    """
-    Sort key for the list of calendars:  primary calendar first,
-    then other selected calendars, then unselected calendars.
-    (" " sorts before "X", and tuples are compared piecewise)
-    """
-    if event["start"]:
-       start_key = " "
-    else:
-       start_key = "X"
+# def event_sort_key( event ):
+#     """
+#     Sort key for the list of calendars:  primary calendar first,
+#     then other selected calendars, then unselected calendars.
+#     (" " sorts before "X", and tuples are compared piecewise)
+#     """
+#     if event["start"]:
+#        start_key = " "
+#     else:
+#        start_key = "X"
 
-    return (start_key, event["summary"])
+#     return (start_key, event["summary"])
 
 
 #################
