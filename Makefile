@@ -70,7 +70,7 @@ service:	env
 ## might add test cases that can't be run under 'nose' 
 ##
 test:	env
-	$(INVENV) nosetests --nologcapture
+	$(INVENV) nosetests -s
 
 testv:	env
 	$(INVENV) nosetests
