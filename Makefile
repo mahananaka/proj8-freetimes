@@ -70,7 +70,9 @@ service:	env
 ## might add test cases that can't be run under 'nose' 
 ##
 test:	env
-	$(INVENV) nosetests -s
+	($(INVENV) nosetests -s)
+
+testv:
 
 ##
 ## Preserve virtual environment for git repository
