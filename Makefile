@@ -72,9 +72,6 @@ service:	env
 test:	env
 	$(INVENV) nosetests -s
 
-testv:	env
-	$(INVENV) nosetests
-
 ##
 ## Preserve virtual environment for git repository
 ## to duplicate it on other targets
