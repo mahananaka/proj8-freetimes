@@ -572,10 +572,10 @@ class Agenda:
 #            "\n" + "2013.12.01 11:00 13:00 | most of day" + 
 #            "\n" + "2013.12.01 14:00 15:00 | most of day")
 
-if __name__ == "__main__":
-    # selftest_appt()
-    # selftest_agenda()
-    # selftest2_agenda()
+# if __name__ == "__main__":
+#     selftest_appt()
+#     selftest_agenda()
+#     selftest2_agenda()
         
 
     
