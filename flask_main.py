@@ -120,7 +120,8 @@ def displayEvents():
         busytimes.append(day_of_busytimes)
         day_of_busytimes.purge()
 
-    app.logger.debug(busytimes)
+    for day in busytimes:
+      app.logger.debug(day)
 
     return render_template('calendar.html')
 
