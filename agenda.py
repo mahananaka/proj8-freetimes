@@ -56,7 +56,7 @@ class Appt:
 
         if begin.date() != end.date():
             raise ValueError("The start and finish should have the same dates.")
-            
+
         result = Appt(begin.date(), begin.time(), end.time(), desc)
         return result
 
@@ -321,6 +321,7 @@ class Agenda:
         day = freeblock.begin.date()
         desc = freeblock.desc
         cur_time = freeblock.begin
+        print("{}: day is {} cur_time is {}".format(desc,day,cur_time))
         for appt in copy.appts:
             if appt < freeblock:
                 continue
