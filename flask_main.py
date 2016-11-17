@@ -347,8 +347,10 @@ def same_date(x,y):
     """
     Takes two isoformated datetime objects and determines if they are the same date
     """
+    x_arw = arrow.get(x)
+    y_arw = arrow.get(y)
 
-    return x.date() == y.date()
+    return x_arw.date() == y_arw.date()
 
 ####
 #
