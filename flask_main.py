@@ -103,8 +103,10 @@ def displayEvents():
     curDay = sorted_events[0]['start']
     i = 0
     count = len(sorted_events)
+    begin = arrow.get(flask.session['begin_date'])
+    end = arrow.get(flask.session['end_date'])
 
-    for day in arrow.Arrow.range('day',flask.session['begin_date'].datetime,flask.session['end_date'].datetime):
+    for day in arrow.Arrow.range('day',begin,end):
 
       if i < count:
         e = sorted_events[i]
