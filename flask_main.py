@@ -104,7 +104,7 @@ def displayEvents():
     i = 0
     count = len(sorted_events)
     begin = arrow.get(flask.session['begin_date'])
-    end = arrow.get(flask.session['end_date'])
+    end = arrow.get(next_day(flask.session['end_date']))
 
     for day in arrow.Arrow.range('day',begin,end):
 
