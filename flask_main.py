@@ -105,7 +105,7 @@ def displayEvents():
       app.logger.debug(appt)
 
     for appt in schedule["free"]:
-      appl.logger.debug(appt)
+      app.logger.debug(appt)
 
     return render_template('calendar.html')
 
