@@ -104,7 +104,7 @@ def displayEvents():
     i = 0
     count = len(sorted_events)
 
-    for day in arrow.Arrow.range('day',flask.session['begin_date'],flask.session['end_date']):
+    for day in arrow.Arrow.range('day',flask.session['begin_date'].datetime,flask.session['end_date'].datetime):
 
       if i < count:
         e = sorted_events[i]
@@ -327,8 +327,8 @@ def interpret_date( text, fmt="MM/DD/YYYY" ):
     with the local time zone.
     """
     try:
-      as_arrow = arrow.get(text, fmt).replace(
-          tzinfo=tz.tzlocal())
+      as_arrow = arrow.get(text, fmt)
+      as_arrow = as_arrow.replace(tzinfo=tz.tzlocal())
     except:
         flask.flash("Date '{}' didn't fit expected format 12/31/2001")
         raise
