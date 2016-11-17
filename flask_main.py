@@ -108,7 +108,7 @@ def displayEvents():
       for e in sorted_events[i:]:
         if same_date(day.isoformat(), e['start']):
           day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
-          i++
+          i = i+1
 
       busytimes.append(day_of_busytimes)
 
