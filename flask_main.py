@@ -95,30 +95,38 @@ def displayEvents():
     sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = sorted_events
 
-
-    appt = Appt(events[0]['start'],events[0]['end'],events[0]['summary'])
-    app.logger.debug(appt)
-    day_of_busytimes = Agenda()
     busytimes = []
-    curDay = sorted_events[0]['start']
-    i = 0
+    
     count = len(sorted_events)
     begin = arrow.get(flask.session['begin_date'])
-    end = arrow.get(flask.session['end_date'])
+    end = arrow.get(next_day(flask.session['end_date']))
 
     for day in arrow.Arrow.range('day',begin,end):
-
-      if i < count:
-        e = sorted_events[i]
-
+      day_of_busytimes = Agenda()
+      
+      for e in sorted_events:
         if same_date(day.isoformat(), e['start']):
           day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
-        else:
-          busytimes.append(day_of_busytimes)
-          day_of_busytimes = Agenda()
-      else:
-        busytimes.append(day_of_busytimes)
-        day_of_busytimes = Agenda()
+
+      busytimes.append(day_of_busytimes)
+      
+          
+
+      # if i < count:
+      #   e = sorted_events[i]
+
+      # while(same_date(day.isoformat(), e['start'])):
+      #   day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
+      #   i++
+      #   e = sorted_events[i]
+
+      # else:
+      #   busytimes.append(day_of_busytimes)
+      #   day_of_busytimes = Agenda()
+      
+      # else:
+      #   busytimes.append(day_of_busytimes)
+      #   day_of_busytimes = Agenda()
 
     app.logger.debug(busytimes)
     for day in busytimes:
