@@ -22,7 +22,7 @@ class Appt:
     date and time, and ending at a later time the same day.
     """
     
-    def __init__(self, begin, end, desc): #changed
+    def __init__(self, day, begin, end, desc): #changed
         """Create an appointment on date
         from begin time to end time.
         
@@ -42,14 +42,23 @@ class Appt:
                 datetime.time(17,45))
             (December 1 from 4:30pm to 5:45pm)
         """
-        # self.begin = datetime.datetime.combine(day, begin)
-        # self.end = datetime.datetime.combine(day, end)
-        self.begin = dt.parse(begin)
-        self.end = dt.parse(end)
+        self.begin = datetime.datetime.combine(day, begin)
+        self.end = datetime.datetime.combine(day, end)
         if begin >= end :
             raise ValueError("Appointment end must be after begin")
         self.desc = desc
         return
+
+    @classmethod
+    def from_iso_date(cls, start, finish, desc):
+        begin = dt.parse(start)
+        end = dt.parse(finish)
+
+        if begin.date() != end.date():
+            raise ValueError("The start and finish should have the same dates.")
+            
+        result = Appt(begin.date(), begin.time(), end.time(), desc)
+        return result
 
     # @classmethod
     # def from_string(cls, txt):
@@ -213,9 +222,12 @@ class Agenda:
         """Add an Appt to the agenda."""
         self.appts.append(appt)
 
-    def purge(self):
-        """Reset  agenda"""
-        self.appts = []
+    def get_date(self):
+        """Returns the date of the first appt in the agenda"""
+        if len(self.appts) < 1:
+            return None
+        else:
+            return self.appts[0].begin.isoformat()
 
     def intersect(self,other,desc=""): 
         """Return a new agenda containing appointments
