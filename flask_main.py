@@ -355,7 +355,7 @@ def get_busy_free_times(events, dStart, dEnd, tStart, tEnd):
       
       for e in events[i:]:
         if same_date(day.isoformat(), e['start']):
-          busytimes_today.append(Appt(e['start'],e['end'],e['summary']))
+          busytimes_today.append(Appt.from_iso_date(e['start'],e['end'],e['summary']))
           i = i+1
 
       timeframe = Appt.from_iso_date(time_begin,time_end,"Free Time")    
