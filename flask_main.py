@@ -95,7 +95,8 @@ def displayEvents():
     sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = sorted_events
 
-    appt = Appt(events[0].start,events[0].end,e.summary)
+
+    appt = Appt(events[0]['start'],events[0]['end'],events[0]['summary'])
     app.logger.debug(appt)
     busytimes = Agenda()
 
