@@ -95,22 +95,23 @@ def displayEvents():
     sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = sorted_events
 
-    busytimes = []
+    busytimes = get_busy_times(sorted_events, flask.session['begin_date'],flask.session['end_date'])
+
     
-    count = len(sorted_events)
-    begin = arrow.get(flask.session['begin_date'])
-    end = arrow.get(flask.session['end_date'])
-    i = 0
+    # count = len(sorted_events)
+    # begin = arrow.get(flask.session['begin_date'])
+    # end = arrow.get(flask.session['end_date'])
+    # i = 0
 
-    for day in arrow.Arrow.range('day',begin,end):
-      day_of_busytimes = Agenda()
+    # for day in arrow.Arrow.range('day',begin,end):
+    #   day_of_busytimes = Agenda()
       
-      for e in sorted_events[i:]:
-        if same_date(day.isoformat(), e['start']):
-          day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
-          i = i+1
+    #   for e in sorted_events[i:]:
+    #     if same_date(day.isoformat(), e['start']):
+    #       day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
+    #       i = i+1
 
-      busytimes.append(day_of_busytimes)
+    #   busytimes.append(day_of_busytimes)
 
 
     app.logger.debug(busytimes)
@@ -450,7 +451,25 @@ def in_time_frame(startTime, endTime, lowerbound, upperbound):
           
     return retval
 
+def get_busy_times(events, start, finish):
+    busytimes = []
+    
+    count = len(events)
+    begin = arrow.get(start)
+    end = arrow.get(finish)
+    i = 0
 
+    for day in arrow.Arrow.range('day',begin,end):
+      day_of_busytimes = Agenda()
+      
+      for e in events[i:]:
+        if same_date(day.isoformat(), e['start']):
+          day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
+          i = i+1
+
+      busytimes.append(day_of_busytimes)
+
+    return busytimes
 
 def cal_sort_key( cal ):
     """
