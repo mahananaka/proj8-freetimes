@@ -113,8 +113,8 @@
     prefer down then across). 
     -->
 <br><br>
-<form action="{{ url_for('displayEvents') }}" method="post">
 {% if g.calendars is defined  %}
+<form action="{{ url_for('displayEvents') }}" method="post">
   <div class="row">
   {% for cal in g.calendars if cal.selected %}
       <div class="col-md-4">
@@ -126,7 +126,6 @@
   {% endfor %}
   </div>
   <input type="submit" value="Get schedule for these calendars">
-{% endif %}
 </form>
 <script type="text/javascript">
   function validateForm(){
@@ -141,6 +140,7 @@
     return valid;
   }
 </script>
+{% endif %}
 
   </div>  <!-- container (for bootstrap) -->
   </body> </html>

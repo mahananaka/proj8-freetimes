@@ -9,7 +9,7 @@ import logging
 
 # Date handling 
 import arrow # Replacement for datetime, based on moment.js
-# import datetime # But we still need time
+import datetime # But we still need time
 from dateutil import tz  # For interpreting local times
 
 # OAuth2  - Google library implementation for convenience
@@ -95,30 +95,309 @@ def displayEvents():
     sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = sorted_events
 
-    busytimes = get_busy_times(sorted_events, flask.session['begin_date'],flask.session['end_date'])
+    start = combine_date_time(flask.session['begin_date'], flask_session['begin_time'])
+    end = combine_date_time(flask.session['end_date'], flask_session['end_time'])
 
-    
-    # count = len(sorted_events)
-    # begin = arrow.get(flask.session['begin_date'])
-    # end = arrow.get(flask.session['end_date'])
-    # i = 0
+    schedule = get_busy_free_times(sorted_events,
+                                    flask.session['begin_date'],
+                                    flask.session['end_date'], 
+                                    flask_session['begin_time'],
+                                    flask.session['end_time'])
 
-    # for day in arrow.Arrow.range('day',begin,end):
-    #   day_of_busytimes = Agenda()
+    for appt in schedule["busy"]:
+      app.logger.debug(appt)
+
+    for appt in schedule["free"]:
+      appl.logger.debug(appt)
       
-    #   for e in sorted_events[i:]:
-    #     if same_date(day.isoformat(), e['start']):
-    #       day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
-    #       i = i+1
-
-    #   busytimes.append(day_of_busytimes)
-
-
-    app.logger.debug(busytimes)
-    for day in busytimes:
-      app.logger.debug(day)
-
     return render_template('calendar.html')
+
+#####
+#
+#  Option setting:  Buttons or forms that add some
+#     information into session state.  Don't do the
+#     computation here; use of the information might
+#     depend on what other information we have.
+#   Setting an option sends us back to the main display
+#      page, where we may put the new information to use. 
+#
+#####
+
+@app.route('/setrange', methods=['POST'])
+def setrange():
+    """
+    User chose a date range with the bootstrap daterange
+    widget.
+    """
+    app.logger.debug("Entering setrange")  
+    flask.flash("Updated date and time range")
+
+    daterange = request.form.get('daterange')
+    daterange_parts = daterange.split()
+
+    flask.session['daterange'] = daterange
+    flask.session['begin_date'] = interpret_date(daterange_parts[0])
+    flask.session['end_date'] = interpret_date(daterange_parts[2])
+    flask.session['begin_time'] = interpret_time(request.form.get('starttime'),"h:mma")
+    flask.session['end_time'] = interpret_time(request.form.get('endtime'),"h:mma")
+
+    app.logger.debug("{},{}".format(request.form.get('starttime'),request.form.get('endtime')))
+    app.logger.debug("{},{}".format(flask.session['begin_time'],flask.session['end_time']))
+
+    app.logger.debug("Setrange parsed {} - {}  dates as {} - {}".format(
+      daterange_parts[0], daterange_parts[1], 
+      flask.session['begin_date'], flask.session['end_date']))
+    return flask.redirect(flask.url_for("choose"))
+
+####
+#
+#   Initialize session variables 
+#
+####
+
+def init_session_values():
+    """
+    Start with some reasonable defaults for date and time ranges.
+    Note this must be run in app context ... can't call from main. 
+    """
+    # Default date span = tomorrow to 1 week from now
+    now = arrow.now('local')     # We really should be using tz from browser
+    tomorrow = now.replace(days=+1)
+    nextweek = now.replace(days=+7)
+    flask.session["begin_date"] = tomorrow.floor('day').isoformat()
+    flask.session["end_date"] = nextweek.ceil('day').isoformat()
+    flask.session["daterange"] = "{} - {}".format(
+        tomorrow.format("MM/DD/YYYY"),
+        nextweek.format("MM/DD/YYYY"))
+    # Default time span each day, 8 to 5
+    flask.session["begin_time"] = interpret_time("9am","ha")
+    flask.session["end_time"] = interpret_time("5pm","ha")
+
+def interpret_time( text, time_format="h:mma"):
+    """
+    Read time in a human-compatible format and
+    interpret as ISO format with local timezone.
+    May throw exception if time can't be interpreted. In that
+    case it will also flash a message explaining accepted formats.
+    """
+    #time_formats = ["ha", "h:mma",  "h:mm a", "H:mm"]
+    try:
+        as_arrow = arrow.get(text, time_format)
+        as_arrow = as_arrow.replace(tzinfo=tz.tzlocal())
+        as_arrow = as_arrow.replace(year=2016) #HACK see below
+        app.logger.debug("Succeeded interpreting time")
+    except:
+        app.logger.debug("Failed to interpret time")
+        flask.flash("Time '{}' didn't match accepted formats 13:30 or 1:30pm"
+              .format(text))
+        raise
+    return as_arrow.isoformat()
+    #HACK #Workaround
+    # isoformat() on raspberry Pi does not work for some dates
+    # far from now.  It will fail with an overflow from time stamp out
+    # of range while checking for daylight savings time.  Workaround is
+    # to force the date-time combination into the year 2016, which seems to
+    # get the timestamp into a reasonable range. This workaround should be
+    # removed when Arrow or Dateutil.tz is fixed.
+    # FIXME: Remove the workaround when arrow is fixed (but only after testing
+    # on raspberry Pi --- failure is likely due to 32-bit integers on that platform)
+
+
+def interpret_date( text, fmt="MM/DD/YYYY" ):
+    """
+    Convert text of date to ISO format used internally,
+    with the local time zone.
+    """
+    try:
+      as_arrow = arrow.get(text, fmt)
+      as_arrow = as_arrow.replace(tzinfo=tz.tzlocal())
+    except:
+        flask.flash("Date '{}' didn't fit expected format 12/31/2001")
+        raise
+    return as_arrow.isoformat()
+
+####
+#
+#  Functions (NOT pages) that return some information
+#
+####
+
+def combine_date_time(arw_date, arw_time):
+    """
+    Combines and arrow date and time
+    """
+    output = datetime.datetime.combine(arw_date.date(),arw_time.time())
+    return output.isoformat()
+
+def next_day(isotext):
+    """
+    ISO date + 1 day (used in query to Google calendar)
+    """
+    as_arrow = arrow.get(isotext)
+    return as_arrow.replace(days=+1).isoformat()
+
+def same_date(x,y):
+    """
+    Takes two isoformated datetime objects and determines if they are the same date
+    """
+    x_arw = arrow.get(x)
+    y_arw = arrow.get(y)
+
+    return x_arw.date() == y_arw.date()
+  
+def list_calendars(service):
+    """
+    Given a google 'service' object, return a list of
+    calendars.  Each calendar is represented by a dict.
+    The returned list is sorted to have
+    the primary calendar first, and selected (that is, displayed in
+    Google Calendars web app) calendars before unselected calendars.
+    """
+    app.logger.debug("Entering list_calendars")  
+    calendar_list = service.calendarList().list().execute()["items"]
+    result = [ ]
+    for cal in calendar_list:
+        kind = cal["kind"]
+        id = cal["id"]
+        if "description" in cal: 
+            desc = cal["description"]
+        else:
+            desc = "(no description)"
+        summary = cal["summary"]
+        # Optional binary attributes with False as default
+        selected = ("selected" in cal) and cal["selected"]
+        primary = ("primary" in cal) and cal["primary"]
+        
+
+        result.append(
+          { "kind": kind,
+            "id": id,
+            "summary": summary,
+            "selected": selected,
+            "primary": primary
+            })
+    return sorted(result, key=cal_sort_key)
+
+def format_events(events):
+    """
+    Given a google 'service' object, return a list of
+    calendars.  Each calendar is represented by a dict.
+    The returned list is sorted to have
+    the primary calendar first, and selected (that is, displayed in
+    Google Calendars web app) calendars before unselected calendars.
+    """
+    app.logger.debug("Entering format_events")
+    result = [ ]
+    for e in events:
+        if("date" in e["start"]):
+          start = interpret_date(e["start"]["date"],"YYYY-MM-DD")
+          end = interpret_date(e["end"]["date"],"YYYY-MM-DD")
+        else:
+          start = e["start"]["dateTime"]
+          end = e["end"]["dateTime"]
+
+        if("transparency" in e):
+          show = False
+        else:
+          show = True
+
+        if(show and in_time_frame(start,end,flask.session['begin_time'],flask.session['end_time'])):
+          result.append(
+            { "kind": e["kind"],
+              "id": e["id"],
+              "summary": e["summary"],
+              "start": start,
+              "end": end,
+              "show": show
+              })
+
+    return result
+
+def in_time_frame(startTime, endTime, lowerbound, upperbound):
+    """
+    This function takes a time frame and compares to established
+    session time window to see if it matters. We do this because
+    the query to the google calendar api grabs everything on the
+    dates in the range and we now filter down to the times that 
+    matter.
+    """
+
+    arw_lowerbound = arrow.get(lowerbound).to('local').time()
+    arw_upperbound = arrow.get(upperbound).to('local').time()
+    start = arrow.get(startTime).to('local').time()
+    end = arrow.get(endTime).to('local').time()
+    retval = False
+
+    if(start <= arw_lowerbound and end >= arw_lowerbound): #event starts before time-frame but ends after time-frame start
+        retval = True
+
+    if(start >= arw_lowerbound and end <= arw_upperbound): #event starts and ends inside the time-frame
+        retval = True
+
+    if(start <= arw_upperbound and end >= arw_upperbound): #event starts before end of time-frame and continues past it
+        retval = True
+
+    if(start <= arw_lowerbound and end >= arw_upperbound): #event completely overlapse the time-frame
+        retval = True
+          
+    return retval
+
+def get_busy_free_times(events, dStart, dEnd, tStart, tEnd):
+    busytimes = []
+    freetimes = []
+    
+    count = len(events)
+    begin = arrow.get(dStart)
+    end = arrow.get(dEnd)
+    time_begin = combine_date_time(begin, arrow.get(tStart))
+    time_end = combine_date_time(begin, arrow.get(tEnd))
+    i = 0
+
+    for day in arrow.Arrow.range('day',begin,end):
+      busytimes_today = Agenda()
+      
+      for e in events[i:]:
+        if same_date(day.isoformat(), e['start']):
+          busytimes_today.append(Appt(e['start'],e['end'],e['summary']))
+          i = i+1
+
+      timeframe = Appt(time_begin,time_end,"Free Time")    
+      freetimes.append(busytimes_today.complement(timeframe))
+      busytimes.append(busytimes_today)
+
+    return {"busy":busytimes, "free":freetimes}
+
+# def get_free_times(busytimes, start, finish):
+
+#     count = len(busytimes)
+#     begin = arrow.get(start)
+#     end = arrow.get(finish)
+#     i = 0
+
+#     for day in arrow.Arrow.range('day',begin,end):
+#       day_of_busytimes = Agenda()
+
+#     for day in busytimes:
+#       cur_date = day.get_date()
+
+#       if cur_date == None:
+
+
+def cal_sort_key( cal ):
+    """
+    Sort key for the list of calendars:  primary calendar first,
+    then other selected calendars, then unselected calendars.
+    (" " sorts before "X", and tuples are compared piecewise)
+    """
+    if cal["selected"]:
+       selected_key = " "
+    else:
+       selected_key = "X"
+    if cal["primary"]:
+       primary_key = " "
+    else:
+       primary_key = "X"
+    return (primary_key, selected_key, cal["summary"])
 
 ####
 #
@@ -227,278 +506,6 @@ def oauth2callback():
     ## the main screen
     app.logger.debug("Got credentials")
     return flask.redirect(flask.url_for('choose'))
-
-#####
-#
-#  Option setting:  Buttons or forms that add some
-#     information into session state.  Don't do the
-#     computation here; use of the information might
-#     depend on what other information we have.
-#   Setting an option sends us back to the main display
-#      page, where we may put the new information to use. 
-#
-#####
-
-@app.route('/setrange', methods=['POST'])
-def setrange():
-    """
-    User chose a date range with the bootstrap daterange
-    widget.
-    """
-    app.logger.debug("Entering setrange")  
-    flask.flash("Updated date and time range")
-
-    daterange = request.form.get('daterange')
-    daterange_parts = daterange.split()
-
-    flask.session['daterange'] = daterange
-    flask.session['begin_date'] = interpret_date(daterange_parts[0])
-    flask.session['end_date'] = interpret_date(daterange_parts[2])
-    flask.session['start_time'] = interpret_time(request.form.get('starttime'),"h:mma")
-    flask.session['end_time'] = interpret_time(request.form.get('endtime'),"h:mma")
-
-    app.logger.debug("{},{}".format(request.form.get('starttime'),request.form.get('endtime')))
-    app.logger.debug("{},{}".format(flask.session['start_time'],flask.session['end_time']))
-
-    app.logger.debug("Setrange parsed {} - {}  dates as {} - {}".format(
-      daterange_parts[0], daterange_parts[1], 
-      flask.session['begin_date'], flask.session['end_date']))
-    return flask.redirect(flask.url_for("choose"))
-
-####
-#
-#   Initialize session variables 
-#
-####
-
-def init_session_values():
-    """
-    Start with some reasonable defaults for date and time ranges.
-    Note this must be run in app context ... can't call from main. 
-    """
-    # Default date span = tomorrow to 1 week from now
-    now = arrow.now('local')     # We really should be using tz from browser
-    tomorrow = now.replace(days=+1)
-    nextweek = now.replace(days=+7)
-    flask.session["begin_date"] = tomorrow.floor('day').isoformat()
-    flask.session["end_date"] = nextweek.ceil('day').isoformat()
-    flask.session["daterange"] = "{} - {}".format(
-        tomorrow.format("MM/DD/YYYY"),
-        nextweek.format("MM/DD/YYYY"))
-    # Default time span each day, 8 to 5
-    flask.session["begin_time"] = interpret_time("9am","ha")
-    flask.session["end_time"] = interpret_time("5pm","ha")
-
-def interpret_time( text, time_format="h:mma"):
-    """
-    Read time in a human-compatible format and
-    interpret as ISO format with local timezone.
-    May throw exception if time can't be interpreted. In that
-    case it will also flash a message explaining accepted formats.
-    """
-    #time_formats = ["ha", "h:mma",  "h:mm a", "H:mm"]
-    try:
-        as_arrow = arrow.get(text, time_format)
-        as_arrow = as_arrow.replace(tzinfo=tz.tzlocal())
-        as_arrow = as_arrow.replace(year=2016) #HACK see below
-        app.logger.debug("Succeeded interpreting time")
-    except:
-        app.logger.debug("Failed to interpret time")
-        flask.flash("Time '{}' didn't match accepted formats 13:30 or 1:30pm"
-              .format(text))
-        raise
-    return as_arrow.isoformat()
-    #HACK #Workaround
-    # isoformat() on raspberry Pi does not work for some dates
-    # far from now.  It will fail with an overflow from time stamp out
-    # of range while checking for daylight savings time.  Workaround is
-    # to force the date-time combination into the year 2016, which seems to
-    # get the timestamp into a reasonable range. This workaround should be
-    # removed when Arrow or Dateutil.tz is fixed.
-    # FIXME: Remove the workaround when arrow is fixed (but only after testing
-    # on raspberry Pi --- failure is likely due to 32-bit integers on that platform)
-
-
-def interpret_date( text, fmt="MM/DD/YYYY" ):
-    """
-    Convert text of date to ISO format used internally,
-    with the local time zone.
-    """
-    try:
-      as_arrow = arrow.get(text, fmt)
-      as_arrow = as_arrow.replace(tzinfo=tz.tzlocal())
-    except:
-        flask.flash("Date '{}' didn't fit expected format 12/31/2001")
-        raise
-    return as_arrow.isoformat()
-
-def next_day(isotext):
-    """
-    ISO date + 1 day (used in query to Google calendar)
-    """
-    as_arrow = arrow.get(isotext)
-    return as_arrow.replace(days=+1).isoformat()
-
-def same_date(x,y):
-    """
-    Takes two isoformated datetime objects and determines if they are the same date
-    """
-    x_arw = arrow.get(x)
-    y_arw = arrow.get(y)
-
-    return x_arw.date() == y_arw.date()
-
-####
-#
-#  Functions (NOT pages) that return some information
-#
-####
-  
-def list_calendars(service):
-    """
-    Given a google 'service' object, return a list of
-    calendars.  Each calendar is represented by a dict.
-    The returned list is sorted to have
-    the primary calendar first, and selected (that is, displayed in
-    Google Calendars web app) calendars before unselected calendars.
-    """
-    app.logger.debug("Entering list_calendars")  
-    calendar_list = service.calendarList().list().execute()["items"]
-    result = [ ]
-    for cal in calendar_list:
-        kind = cal["kind"]
-        id = cal["id"]
-        if "description" in cal: 
-            desc = cal["description"]
-        else:
-            desc = "(no description)"
-        summary = cal["summary"]
-        # Optional binary attributes with False as default
-        selected = ("selected" in cal) and cal["selected"]
-        primary = ("primary" in cal) and cal["primary"]
-        
-
-        result.append(
-          { "kind": kind,
-            "id": id,
-            "summary": summary,
-            "selected": selected,
-            "primary": primary
-            })
-    return sorted(result, key=cal_sort_key)
-
-def format_events(events):
-    """
-    Given a google 'service' object, return a list of
-    calendars.  Each calendar is represented by a dict.
-    The returned list is sorted to have
-    the primary calendar first, and selected (that is, displayed in
-    Google Calendars web app) calendars before unselected calendars.
-    """
-    app.logger.debug("Entering format_events")
-    result = [ ]
-    for e in events:
-        if("date" in e["start"]):
-          start = interpret_date(e["start"]["date"],"YYYY-MM-DD")
-          end = interpret_date(e["end"]["date"],"YYYY-MM-DD")
-        else:
-          start = e["start"]["dateTime"]
-          end = e["end"]["dateTime"]
-
-        if("transparency" in e):
-          show = False
-        else:
-          show = True
-
-        if(show and in_time_frame(start,end,flask.session['start_time'],flask.session['end_time'])):
-          result.append(
-            { "kind": e["kind"],
-              "id": e["id"],
-              "summary": e["summary"],
-              "start": start,
-              "end": end,
-              "show": show
-              })
-
-    return result
-
-def in_time_frame(startTime, endTime, lowerbound, upperbound):
-    """
-    This function takes a time frame and compares to established
-    session time window to see if it matters. We do this because
-    the query to the google calendar api grabs everything on the
-    dates in the range and we now filter down to the times that 
-    matter.
-    """
-
-    arw_lowerbound = arrow.get(lowerbound).to('local').time()
-    arw_upperbound = arrow.get(upperbound).to('local').time()
-    start = arrow.get(startTime).to('local').time()
-    end = arrow.get(endTime).to('local').time()
-    retval = False
-
-    if(start <= arw_lowerbound and end >= arw_lowerbound): #event starts before time-frame but ends after time-frame start
-        retval = True
-
-    if(start >= arw_lowerbound and end <= arw_upperbound): #event starts and ends inside the time-frame
-        retval = True
-
-    if(start <= arw_upperbound and end >= arw_upperbound): #event starts before end of time-frame and continues past it
-        retval = True
-
-    if(start <= arw_lowerbound and end >= arw_upperbound): #event completely overlapse the time-frame
-        retval = True
-          
-    return retval
-
-def get_busy_times(events, start, finish):
-    busytimes = []
-    
-    count = len(events)
-    begin = arrow.get(start)
-    end = arrow.get(finish)
-    i = 0
-
-    for day in arrow.Arrow.range('day',begin,end):
-      day_of_busytimes = Agenda()
-      
-      for e in events[i:]:
-        if same_date(day.isoformat(), e['start']):
-          day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
-          i = i+1
-
-      busytimes.append(day_of_busytimes)
-
-    return busytimes
-
-def cal_sort_key( cal ):
-    """
-    Sort key for the list of calendars:  primary calendar first,
-    then other selected calendars, then unselected calendars.
-    (" " sorts before "X", and tuples are compared piecewise)
-    """
-    if cal["selected"]:
-       selected_key = " "
-    else:
-       selected_key = "X"
-    if cal["primary"]:
-       primary_key = " "
-    else:
-       primary_key = "X"
-    return (primary_key, selected_key, cal["summary"])
-
-# def event_sort_key( event ):
-#     """
-#     Sort key for the list of calendars:  primary calendar first,
-#     then other selected calendars, then unselected calendars.
-#     (" " sorts before "X", and tuples are compared piecewise)
-#     """
-#     if event["start"]:
-#        start_key = " "
-#     else:
-#        start_key = "X"
-
-#     return (start_key, event["summary"])
 
 
 #################
