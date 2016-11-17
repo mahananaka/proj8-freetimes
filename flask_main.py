@@ -115,10 +115,10 @@ def displayEvents():
           day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
         else:
           busytimes.append(day_of_busytimes)
-          day_of_busytimes.purge()
+          day_of_busytimes = Agenda()
       else:
         busytimes.append(day_of_busytimes)
-        day_of_busytimes.purge()
+        day_of_busytimes = Agenda()
 
     app.logger.debug(busytimes)
     for day in busytimes:
