@@ -12,13 +12,15 @@ import arrow # Replacement for datetime, based on moment.js
 # import datetime # But we still need time
 from dateutil import tz  # For interpreting local times
 
-
 # OAuth2  - Google library implementation for convenience
 from oauth2client import client
 import httplib2   # used in oauth2 flow
 
 # Google API for services 
 from apiclient import discovery
+
+# Our own modules
+from agenda import Appt, Agenda
 
 ###
 # Globals
@@ -92,6 +94,11 @@ def displayEvents():
 
     sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = sorted_events
+
+    appt = Appt(events[0].start,events[0].end,e.summary)
+    app.logger.debug(appt)
+    busytimes = Agenda()
+
     return render_template('calendar.html')
 
 ####
@@ -371,7 +378,7 @@ def format_events(events):
           end = e["end"]["dateTime"]
 
         if("transparency" in e):
-          show = (e["transparency"] != 'transparent')
+          show = False
         else:
           show = True
 
