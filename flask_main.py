@@ -101,11 +101,11 @@ def displayEvents():
                                     flask.session['begin_time'],
                                     flask.session['end_time'])
 
-    for appt in schedule["busy"]:
-      app.logger.debug(appt)
+    # for appt in schedule["busy"]:
+    #   app.logger.debug(appt)
 
-    for appt in schedule["free"]:
-      app.logger.debug(appt)
+    # for appt in schedule["free"]:
+    #   app.logger.debug(appt)
 
     return render_template('calendar.html')
 
