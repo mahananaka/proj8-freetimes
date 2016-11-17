@@ -99,34 +99,19 @@ def displayEvents():
     
     count = len(sorted_events)
     begin = arrow.get(flask.session['begin_date'])
-    end = arrow.get(next_day(flask.session['end_date']))
+    end = arrow.get(flask.session['end_date'])
+    i = 0
 
     for day in arrow.Arrow.range('day',begin,end):
       day_of_busytimes = Agenda()
       
-      for e in sorted_events:
+      for e in sorted_events[i:]:
         if same_date(day.isoformat(), e['start']):
           day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
+          i++
 
       busytimes.append(day_of_busytimes)
-      
-          
 
-      # if i < count:
-      #   e = sorted_events[i]
-
-      # while(same_date(day.isoformat(), e['start'])):
-      #   day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
-      #   i++
-      #   e = sorted_events[i]
-
-      # else:
-      #   busytimes.append(day_of_busytimes)
-      #   day_of_busytimes = Agenda()
-      
-      # else:
-      #   busytimes.append(day_of_busytimes)
-      #   day_of_busytimes = Agenda()
 
     app.logger.debug(busytimes)
     for day in busytimes:
