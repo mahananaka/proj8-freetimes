@@ -213,6 +213,10 @@ class Agenda:
         """Add an Appt to the agenda."""
         self.appts.append(appt)
 
+    def purge(self):
+        """Reset  agenda"""
+        self.appts = []
+
     def intersect(self,other,desc=""): 
         """Return a new agenda containing appointments
         that are overlaps between appointments in this agenda

@@ -98,7 +98,27 @@ def displayEvents():
 
     appt = Appt(events[0]['start'],events[0]['end'],events[0]['summary'])
     app.logger.debug(appt)
-    busytimes = Agenda()
+    day_of_busytimes = Agenda()
+    busytimes = []
+    curDay = sorted_events[0]['start']
+    i = 0
+    count = len(sorted_events)
+
+    for day in arrow.Arrow.range('day',flask.session['begin_date'],flask.session['end_date']):
+
+      if i < count:
+        e = sorted_events[i]
+
+        if same_date(day.isoformat(), e['start']):
+          day_of_busytimes.append(Appt(e['start'],e['end'],e['summary']))
+        else:
+          busytimes.append(day_of_busytimes)
+          day_of_busytimes.purge()
+      else:
+        busytimes.append(day_of_busytimes)
+        day_of_busytimes.purge()
+
+    app.logger.debug(busytimes)
 
     return render_template('calendar.html')
 
@@ -320,6 +340,13 @@ def next_day(isotext):
     """
     as_arrow = arrow.get(isotext)
     return as_arrow.replace(days=+1).isoformat()
+
+def same_date(x,y):
+    """
+    Takes two isoformated datetime objects and determines if they are the same date
+    """
+
+    return x.date() == y.date()
 
 ####
 #
