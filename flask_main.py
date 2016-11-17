@@ -95,13 +95,10 @@ def displayEvents():
     sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = sorted_events
 
-    start = combine_date_time(flask.session['begin_date'], flask_session['begin_time'])
-    end = combine_date_time(flask.session['end_date'], flask_session['end_time'])
-
     schedule = get_busy_free_times(sorted_events,
                                     flask.session['begin_date'],
                                     flask.session['end_date'], 
-                                    flask_session['begin_time'],
+                                    flask.session['begin_time'],
                                     flask.session['end_time'])
 
     for appt in schedule["busy"]:
@@ -109,7 +106,7 @@ def displayEvents():
 
     for appt in schedule["free"]:
       appl.logger.debug(appt)
-      
+
     return render_template('calendar.html')
 
 #####
