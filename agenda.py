@@ -337,7 +337,7 @@ class Agenda:
                 print("curr < appt.begin\n")
                 # print("Creating free time from", cur_time, "to", appt.begin)
                 comp.append(Appt(day, cur_time.time(), appt.begin.time(), desc))
-            cur_time = max(appt.end,cur_time)
+            cur_time = min(appt.end,cur_time)
         if cur_time < freeblock.end:
             # print("Creating final free time from", cur_time, "to", freeblock.end)
             comp.append(Appt(day, cur_time.time(), freeblock.end.time(), desc))
