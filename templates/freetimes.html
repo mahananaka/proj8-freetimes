@@ -63,7 +63,7 @@
 <form action="{{ url_for('displayEvents') }}" method="post">
 {% if session.free is defined  %}
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
     {% set columnLength = (session.free|length/2)|round(0,'ceil') %}
     {% for freetimes in session.free %}
         <div class="row">
@@ -98,7 +98,7 @@
         </div>
         {% if loop.index is divisibleby columnLength %}
         </div>
-        <div class="col-md-6">
+        <div class="col-md-5">
         {% endif %}
     {% endfor %}
     </div>
