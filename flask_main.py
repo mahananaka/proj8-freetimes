@@ -99,7 +99,9 @@ def displayEvents():
 
 @app.route("/freetime", methods=['POST'])
 def displayFreetimes():
+    app.logger.debug("Entering displayFreetimes")
     if 'events' not in flask.g:
+      app.logger.debug("oh uh!!!")
       return redirect(url_for('index'))
 
     schedule = get_busy_free_times(flask.g.events,
