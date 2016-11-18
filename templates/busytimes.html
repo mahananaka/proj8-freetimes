@@ -59,7 +59,7 @@
     prefer down then across). 
     -->
 <div>Uncheck any busy time bloew that be ignored.</div>
-<form action="{{ url_for('displayFreetimes') }}" method="post">
+<form action="{{ url_for('displayFreetimes') }}" onsubmit="return Validate();" method="post">
 {% if session.events is defined  %}
   <div class="row">
     <div class="col-md-4">
@@ -67,9 +67,10 @@
       {% set columnLength = (session.events|length/3)|round(0,'ceil') %}
       {% for e in session.events %}
         <li>
-          <label><input type="checkbox" name="{{ e.id }}" checked>
-                <strong>{{ e.summary }}</strong>
-                {{ e.start|fmttime + " to " + e.end|fmttime + ", " + e.start|fmtdate }}
+          <label>
+	    <input type="checkbox" name="{{ e.id }}" checked>
+	    <strong>{{ e.summary }}</strong>
+            {{ e.start|fmttime + " to " + e.end|fmttime + ", " + e.start|fmtdate }}
           </label>
         </li>
         {% if loop.index is divisibleby columnLength %}
@@ -84,7 +85,14 @@
   <input type="submit" value="Get free times">
 {% endif %}
 </form>
-
+<script type="text/javascript">
+  function Validate(){
+    $("input:checkbox").each(function(){
+      $(this).prop("checked",!$(this).prop("checked"));
+    });
+    return true;
+  }
+</script>
 <a href="{{ url_for('index') }}">Return to home</a>
     
 

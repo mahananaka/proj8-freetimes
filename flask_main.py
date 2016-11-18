@@ -1,3 +1,4 @@
+
 import flask
 from flask import render_template
 from flask import request
@@ -102,9 +103,13 @@ def displayEvents():
 def displayFreetimes():
     app.logger.debug("Entering displayFreetimes")
     if 'events' not in flask.session:
-      app.logger.debug("oh uh!!!")
+      app.logger.debug("Events not in session redirecting")
       return redirect(url_for('index'))
 
+    events = flask.session['events']
+    for delkey in request.form:
+      events[:] = [d for d in events if d.get('id') != delkey]
+    
     schedule = get_busy_free_times(flask.session['events'],
                                     flask.session['begin_date'],
                                     flask.session['end_date'], 
@@ -112,8 +117,6 @@ def displayFreetimes():
                                     flask.session['end_time'])
 
     #store in session, must be processed so it can go into session
-    print("{} and {}".format(len(schedule['free']),len(schedule['busy'])))
-
     flask.session['free'] = sessionify(schedule['free'])
     flask.session['busy'] = sessionify(schedule['busy'])
 
@@ -376,7 +379,7 @@ def get_busy_free_times(events, dStart, dEnd, tStart, tEnd):
       #lets generate free times from busy times and and append both to their respective arrays
       timeframe = Appt.from_iso_date(time_begin,time_end,"Free Time")
       freetimes.append(busytimes_today.complement(timeframe))
-      busytimes.append(busytimes_today)
+      busytimes.append(busytimes_today.normalized())
 
       #advance the day to sync with the next iteration
       time_begin = next_day(time_begin)
