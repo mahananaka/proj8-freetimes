@@ -101,8 +101,9 @@ def displayEvents():
                                     flask.session['begin_time'],
                                     flask.session['end_time'])
 
-    for appt in schedule['free']:
-      print("{} to {}\n".format(appt.start_isoformat(),appt.end_isoformat()))
+    for day in schedule['free']:
+      for appt in day.appts:
+        print("{} to {}\n".format(appt.start_isoformat(),appt.end_isoformat()))
 
     return render_template('calendar.html')
 
