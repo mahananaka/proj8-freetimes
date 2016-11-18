@@ -71,13 +71,23 @@
     <div class="control-group">
       <div class="controls">
         <label class="control-label" for="starttime">Start Time</label>
-        <input name="starttime" type="text" value="9:00am">
+        <input name="starttime" type="text"
+	    {% if session.begin_time is defined %}
+               value={{ session.begin_time|fmttime }}
+	    {% else %}
+	       value="9:00am"
+	    {% endif %}>
       </div>
     </div>
     <div class="control-group">
       <div class="controls">
         <label class="control-label" for="endtime">End Time</label>
-        <input name="endtime" type="text" value="5:00pm">
+        <input name="endtime" type="text"
+	       {% if session.begin_time is defined %}
+	          value={{ session.end_time|fmttime }}
+	       {% else %}
+	          value="5:00pm"
+	       {% endif %}>
       </div>
     </div>
 
