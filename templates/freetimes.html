@@ -63,14 +63,14 @@
 <form action="{{ url_for('displayEvents') }}" method="post">
 {% if session.free is defined  %}
   <div class="row">
-    <div class="col-md-6 bg-info">
+    <div class="col-md-6">
     {% set columnLength = (session.free|length/2)|round(0,'ceil') %}
     {% for freetimes in session.free %}
         <div class="row">
-          <div class="col-md-4"><h3 style="display: flex;justify-content: center;">{{ freetimes[0].start|fmtdate }}</h3></div>
+          <div class="col-md-6"><h3 style="display: flex;justify-content: center;">{{ freetimes[0].start|fmtdate }}</h3></div>
         </div>
         <div class="row">
-          <div class="col-md-2">
+          <div class="col-md-3">
             <ul class="list-unstyled">
             <li><strong><u>Free Times</u></strong></li>
             {% set busytimes = session.busy[loop.index0] %}
@@ -83,7 +83,7 @@
             {% endfor %}
             </ul>
           </div>
-          <div class="col-md-2">
+          <div class="col-md-3">
             <ul class="list-unstyled">
             <li><strong><u>Busy Times</u></strong></li>
             {% for item in busytimes %}
@@ -98,7 +98,7 @@
         </div>
         {% if loop.index is divisibleby columnLength %}
         </div>
-        <div class="col-md-6 bg-success">
+        <div class="col-md-6">
         {% endif %}
     {% endfor %}
     </div>
