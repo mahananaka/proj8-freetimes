@@ -228,11 +228,11 @@ class Agenda:
         """Add an Appt to the agenda."""
         self.appts.append(appt)
 
-    def merge_agenda(self, other):
-        for appt in other.appts:
-            self.append(appt)
+    # def merge_agenda(self, other):
+    #     for appt in other.appts:
+    #         self.append(appt)
         
-        self.appts.sort(lambda ap: ap.begin)
+    #     self.appts.sort(lambda ap: ap.begin)
 
 
 

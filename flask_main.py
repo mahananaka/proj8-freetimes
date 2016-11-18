@@ -112,10 +112,9 @@ def displayFreetimes():
                                     flask.session['end_time'])
 
     #store in session, must be processed so it can go into session
-    schedule['free'].merge(schedule['busy'])
 
     flask.session['schedule'] = sessionify(schedule['free'])
-    #flask.session['busy'] = sessionify(schedule['busy'])
+    flask.session['busy'] = sessionify(schedule['busy'])
 
 
     # for day in schedule['free']:

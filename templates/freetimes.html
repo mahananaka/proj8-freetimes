@@ -65,7 +65,7 @@
   <div class="row">
     <div class="col-md-4">
       <ul class="list-unstyled">
-      {% for day in session.free %}
+      {% for day in session.schedule %}
         <h3>{{ day[0].start|fmtdate }}</h3>
         {% for e in day %}
         <li>
