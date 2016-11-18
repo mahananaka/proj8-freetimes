@@ -52,14 +52,13 @@
     </ul>
   {% endif %}
 {% endwith %}
-
-<h2>Calendar Events</h2>
     <!--
     Show the calendar list (if we have it).  This will need to be turned into
     a form from which calendars can be picked. Up to three entries are
     shown in each row (but the order is across then down; I would
     prefer down then across). 
     -->
+<div>Uncheck any busy time bloew that be ignored.</div>
 <form action="{{ url_for('displayFreetimes') }}" method="post">
 {% if session.events is defined  %}
   <div class="row">
@@ -68,7 +67,7 @@
       {% set columnLength = (session.events|length/3)|round(0,'ceil') %}
       {% for e in session.events %}
         <li>
-          <label><input type="checkbox" name="{{ e.id }}" checked> 
+          <label><input type="checkbox" name="{{ e.id }}" checked>
                 <strong>{{ e.summary }}</strong>
                 {{ e.start|fmttime + " to " + e.end|fmttime + ", " + e.start|fmtdate }}
           </label>
