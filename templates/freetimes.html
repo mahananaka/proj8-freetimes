@@ -64,10 +64,10 @@
 {% if session.free is defined  %}
     {% for freetimes in session.free %}
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-2">
+          <h3 class="text centered">{{ freetimes[0].start|fmtdate }}</h3>
           <ul class="list-unstyled">
           {% set busytimes = session.busy[loop.index0] %}
-          <h3>{{ freetimes[0].start|fmtdate }}</h3>
           {% for item in freetimes %}
             <li>
               <label>
@@ -78,7 +78,7 @@
           {% endfor %}
           </ul>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-2">
           <ul class="list-unstyled">
           {% for item in busytimes %}
             <li>
