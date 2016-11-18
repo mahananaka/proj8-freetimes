@@ -105,7 +105,7 @@ def displayFreetimes():
       app.logger.debug("oh uh!!!")
       return redirect(url_for('index'))
 
-    schedule = get_busy_free_times(flask.g.events,
+    schedule = get_busy_free_times(flask.session['events'],
                                     flask.session['begin_date'],
                                     flask.session['end_date'], 
                                     flask.session['begin_time'],
