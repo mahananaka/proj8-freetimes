@@ -69,11 +69,11 @@
       <div class="row">
         <div class="col-md-2">
           <ul class="list-unstyled">
+          <li>Free Times</li>
           {% set busytimes = session.busy[loop.index0] %}
           {% for item in freetimes %}
             <li>
               <label>
-                  <strong>{{ item.descr }}</strong>
                   {{ item.start|fmttime + " to " + item.end|fmttime }}
               </label>
             </li>
@@ -82,10 +82,10 @@
         </div>
         <div class="col-md-2">
           <ul class="list-unstyled">
+          <li>Busy Times</li>
           {% for item in busytimes %}
             <li>
               <label>
-                  <strong>{{ item.descr }}</strong>
                   {{ item.start|fmttime + " to " + item.end|fmttime }}
               </label>
             </li>
