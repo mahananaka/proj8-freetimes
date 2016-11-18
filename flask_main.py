@@ -390,7 +390,7 @@ def sessionify(agenda):
     for day in agenda:
       itinerary = []
       for appt in day.appts:
-        block = {"desc": appt.desc,
+        block = {"descr": appt.desc,
                   "start": appt.begin.isoformat(),
                   "end": appt.end.isoformat()}
         itinerary.append(block)

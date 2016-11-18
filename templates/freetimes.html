@@ -67,9 +67,12 @@
       <ul class="list-unstyled">
       {% for day in session.free %}
         {% for e in day %}
+        {% if e.start|fmtdate is not curDay %}
+        <h3>{{ e.start|fmtdate }}</h3>
+        {% set curDay = e.start|fmtdate }
+        {% endif %}
         <li>
           <label>
-              <strong>{{ e.summary }}</strong>
               {{ e.start|fmttime + " to " + e.end|fmttime + ", " + e.start|fmtdate }}
           </label>
         </li>
