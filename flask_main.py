@@ -101,11 +101,8 @@ def displayEvents():
                                     flask.session['begin_time'],
                                     flask.session['end_time'])
 
-    # for appt in schedule["busy"]:
-    #   app.logger.debug(appt)
-
-    for appt in schedule["free"]:
-       app.logger.debug(appt)
+    for appt in schedule['free']:
+      print("{} to {}\n".format(appt.start_isoformat(),appt.end_isoformat()))
 
     return render_template('calendar.html')
 
@@ -358,13 +355,18 @@ def get_busy_free_times(events, dStart, dEnd, tStart, tEnd):
           busytimes_today.append(Appt.from_iso_date(e['start'],e['end'],e['summary']))
           i = i+1
 
-      timeframe = Appt.from_iso_date(time_begin,time_end,"Free Time")    
+      #we have all busy times for a single day now
+      #lets generate free times from busy times and and append both to their respective arrays
+      timeframe = Appt.from_iso_date(time_begin,time_end,"Free Time")
       freetimes.append(busytimes_today.complement(timeframe))
       busytimes.append(busytimes_today)
+
+      #advance the day to sync with the next iteration
       time_begin = next_day(time_begin)
       time_end = next_day(time_end)
 
 
+    #return this as a dict of the free and busy times
     return {"busy":busytimes, "free":freetimes}
 
 # def get_free_times(busytimes, start, finish):

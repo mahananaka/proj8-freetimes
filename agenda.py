@@ -88,8 +88,14 @@ class Appt:
     #     end =   datetime.datetime.strptime(appt_end_text, "%H:%M").time()
 
     #     result = Appt(date, begin, end, desc)
-    #     return result   
+    #     return result
+
+    def start_isoformat(self):
+        return self.begin.isoformt()
         
+    def end_isoformat(self):
+        return self.begin.isoformt()
+
     def __lt__(self, other):
         """Does this appointment finish before other begins?
         
