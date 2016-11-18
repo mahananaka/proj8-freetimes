@@ -321,20 +321,15 @@ class Agenda:
         day = freeblock.begin.date()
         desc = freeblock.desc
         cur_time = freeblock.begin
-        print("{}: day is {} cur_time is {}\n".format(desc,day,cur_time))
         for appt in copy.appts:
-            print("appt: {} ; freeblock: {}".format(appt,freeblock))
             if appt < freeblock:
-                print(" appt < freeblock\n")
                 continue
             if appt > freeblock:
-                print(" appt > freeblock\n")
                 if cur_time < freeblock.end:
                     comp.append(Appt(day,cur_time.time(),freeblock.end.time(), desc))
                     cur_time = freeblock.end
                 break
             if cur_time < appt.begin:
-                print("curr < appt.begin\n")
                 # print("Creating free time from", cur_time, "to", appt.begin)
                 comp.append(Appt(day, cur_time.time(), appt.begin.time(), desc))
             cur_time = max(appt.end,cur_time)
