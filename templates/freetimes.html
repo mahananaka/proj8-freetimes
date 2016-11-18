@@ -64,6 +64,7 @@
 {% if session.free is defined  %}
   <div class="row">
     <div class="col-md-6 bg-info">
+    {% set columnLength = (session.free|length/2)|round(0,'ceil') %}
     {% for freetimes in session.free %}
         <div class="row">
           <div class="col-md-4"><h3 style="display: flex;justify-content: center;">{{ freetimes[0].start|fmtdate }}</h3></div>
@@ -95,7 +96,7 @@
             </ul>
           </div>
         </div>
-        {% if loop.index is divisibleby 2 %}
+        {% if loop.index is divisibleby columnLength %}
         </div>
         <div class="col-md-6 bg-success">
         {% endif %}
