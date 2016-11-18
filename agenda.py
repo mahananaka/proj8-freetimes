@@ -94,7 +94,7 @@ class Appt:
         return self.begin.isoformat()
         
     def end_isoformat(self):
-        return self.begin.isoformat()
+        return self.end.isoformat()
 
     def __lt__(self, other):
         """Does this appointment finish before other begins?
