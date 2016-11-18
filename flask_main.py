@@ -112,8 +112,9 @@ def displayFreetimes():
                                     flask.session['end_time'])
 
     #store in session, must be processed so it can go into session
+    print("{} and {}".format(len(schedule['free']),len(schedule['busy'])))
 
-    flask.session['schedule'] = sessionify(schedule['free'])
+    flask.session['free'] = sessionify(schedule['free'])
     flask.session['busy'] = sessionify(schedule['busy'])
 
 
