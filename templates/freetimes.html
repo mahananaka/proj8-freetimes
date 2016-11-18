@@ -65,6 +65,7 @@
   <div class="row">
     <div class="col-md-4">
       <ul class="list-unstyled">
+      {% set curDay = 'none' %}
       {% for day in session.free %}
         {% for e in day %}
         {% if e.start|fmtdate is not curDay %}
