@@ -95,18 +95,29 @@ def displayEvents():
     sorted_events = sorted(events, key=lambda e: e["start"])
     flask.g.events = sorted_events
 
-    schedule = get_busy_free_times(sorted_events,
+    return render_template('busytimes.html')
+
+@app.route("/freetime", methods=['POST'])
+def displayFreetimes():
+    if 'events' not in flask.g:
+      return redirect(url_for('index'))
+
+    schedule = get_busy_free_times(flask.g.events,
                                     flask.session['begin_date'],
                                     flask.session['end_date'], 
                                     flask.session['begin_time'],
                                     flask.session['end_time'])
 
-    for day in schedule['free']:
-      for appt in day.appts:
-        print("{} to {}\n".format(appt.start_isoformat(),appt.end_isoformat()))
+    #store in session, must be processed so it can go into session
+    flask.session['free'] = sessionify(schedule['free'])
+    flask.session['busy'] = sessionify(schedule['busy'])
 
-    return render_template('calendar.html')
 
+    # for day in schedule['free']:
+    #   for appt in day.appts:
+    #     print("{} to {}\n".format(appt.start_isoformat(),appt.end_isoformat()))
+
+    return render_template('freetimes.html')
 #####
 #
 #  Option setting:  Buttons or forms that add some
@@ -369,6 +380,22 @@ def get_busy_free_times(events, dStart, dEnd, tStart, tEnd):
 
     #return this as a dict of the free and busy times
     return {"busy":busytimes, "free":freetimes}
+
+def sessionify(agenda):
+    schedule = []
+
+    for day in agenda:
+      itinerary = []
+      for appt in day.appts:
+        block = {"desc": appt.desc,
+                  "start": appt.begin.isoformat(),
+                  "end": appt.end.isoformat()}
+        itinerary.append(block)
+      schedule.append(itinerary)
+
+    return schedule
+    # print("{} to {}\n".format(appt.start_isoformat(),appt.end_isoformat()))
+    
 
 # def get_free_times(busytimes, start, finish):
 
