@@ -69,7 +69,7 @@
         {% for e in day %}
         {% if e.start|fmtdate is not curDay %}
         <h3>{{ e.start|fmtdate }}</h3>
-        {% set curDay = e.start|fmtdate }
+        {% set curDay = e.start|fmtdate %}
         {% endif %}
         <li>
           <label>
