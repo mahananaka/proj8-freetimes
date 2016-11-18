@@ -228,6 +228,14 @@ class Agenda:
         """Add an Appt to the agenda."""
         self.appts.append(appt)
 
+    def merge_agenda(self, other):
+        for appt in other.appts:
+            self.append(appt)
+        
+        self.appts.sort(lambda ap: ap.begin)
+
+
+
     def get_date(self):
         """Returns the date of the first appt in the agenda"""
         if len(self.appts) < 1:

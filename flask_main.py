@@ -112,8 +112,10 @@ def displayFreetimes():
                                     flask.session['end_time'])
 
     #store in session, must be processed so it can go into session
-    flask.session['free'] = sessionify(schedule['free'])
-    flask.session['busy'] = sessionify(schedule['busy'])
+    schedule['free'].merge(schedule['busy'])
+
+    flask.session['schedule'] = sessionify(schedule['free'])
+    #flask.session['busy'] = sessionify(schedule['busy'])
 
 
     # for day in schedule['free']:
@@ -397,23 +399,6 @@ def sessionify(agenda):
       schedule.append(itinerary)
 
     return schedule
-    # print("{} to {}\n".format(appt.start_isoformat(),appt.end_isoformat()))
-    
-
-# def get_free_times(busytimes, start, finish):
-
-#     count = len(busytimes)
-#     begin = arrow.get(start)
-#     end = arrow.get(finish)
-#     i = 0
-
-#     for day in arrow.Arrow.range('day',begin,end):
-#       day_of_busytimes = Agenda()
-
-#     for day in busytimes:
-#       cur_date = day.get_date()
-
-#       if cur_date == None:
 
 
 def cal_sort_key( cal ):
