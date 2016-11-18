@@ -65,16 +65,27 @@
   <div class="row">
     <div class="col-md-4">
       <ul class="list-unstyled">
-      {% for day in session.schedule %}
-        <h3>{{ day[0].start|fmtdate }}</h3>
-        {% for e in day %}
-        <li>
-          <label>
-              <strong>{{ e.desc }}</strong>
-              {{ e.start|fmttime + " to " + e.end|fmttime }}
-          </label>
-        </li>
+      {% for freetimes in session.free %}
+        {% set busytimes = session.busy[loop.index] %}
+        <h3>{{ freetimes[0].start|fmtdate }}</h3>
+        {% for item in freetimes %}
+          <li>
+            <label>
+                <strong>{{ item.desc }}</strong>
+                {{ item.start|fmttime + " to " + item.end|fmttime }}
+            </label>
+          </li>
         {% endfor %}
+        </ul>
+        <ul class="list-unstyled">
+        {% for item in busytimes %}
+          <li>
+            <label>
+                <strong>{{ item.desc }}</strong>
+                {{ item.start|fmttime + " to " + item.end|fmttime }}
+            </label>
+          </li>
+        {% endfor%}
       {% endfor %}
       </ul>
     </div>
