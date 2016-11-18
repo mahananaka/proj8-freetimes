@@ -61,12 +61,12 @@
     prefer down then across). 
     -->
 <form action="{{ url_for('displayFreetimes') }}" method="post">
-{% if g.events is defined  %}
+{% if session.events is defined  %}
   <div class="row">
     <div class="col-md-4">
       <ul class="list-unstyled">
-      {% set columnLength = (g.events|length/3)|round(0,'ceil') %}
-      {% for e in g.events %}
+      {% set columnLength = (session.events|length/3)|round(0,'ceil') %}
+      {% for e in session.events %}
         <li>
           <label><input type="checkbox" name="{{ e.id }}" checked> 
                 <strong>{{ e.summary }}</strong>
