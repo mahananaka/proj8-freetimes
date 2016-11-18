@@ -65,16 +65,14 @@
   <div class="row">
     <div class="col-md-4">
       <ul class="list-unstyled">
-      {% set curDay = 'none' %}
       {% for day in session.free %}
         {% for e in day %}
-        {% if e.start|fmtdate is not curDay %}
         <h3>{{ e.start|fmtdate }}</h3>
-        {% set curDay = e.start|fmtdate %}
         {% endif %}
         <li>
           <label>
-              {{ e.start|fmttime + " to " + e.end|fmttime + ", " + e.start|fmtdate }}
+              <strong>{{ e.desc }}</strong>
+              {{ e.start|fmttime + " to " + e.end|fmttime }}
           </label>
         </li>
         {% endfor %}
