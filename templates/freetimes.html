@@ -72,7 +72,7 @@
         <div class="row">
           <div class="col-md-6">
             <ul class="list-unstyled">
-            <li><strong><u>Free Times</u></strong></li>
+            <li><strong class="well"><u>Free Times</u></strong></li>
             {% set busytimes = session.busy[loop.index0] %}
             {% for item in freetimes %}
               <li>
@@ -85,7 +85,7 @@
           </div>
           <div class="col-md-6">
             <ul class="list-unstyled">
-            <li><strong><u>Busy Times</u></strong></li>
+            <li><strong class="well"><u>Busy Times</u></strong></li>
             {% for item in busytimes %}
               <li>
                 <label>
