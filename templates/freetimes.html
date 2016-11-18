@@ -63,7 +63,7 @@
 <form action="{{ url_for('displayEvents') }}" method="post">
 {% if session.free is defined  %}
   <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-6 bg-info">
     {% for freetimes in session.free %}
         <div class="row">
           <div class="col-md-4"><h3 style="display: flex;justify-content: center;">{{ freetimes[0].start|fmtdate }}</h3></div>
@@ -99,7 +99,7 @@
         </div>
         </div>
         <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-6 bg-success">
         {% endif %}
     {% endfor %}
     </div>
