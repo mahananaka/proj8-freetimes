@@ -94,7 +94,7 @@ def displayEvents():
       events = events + format_events(response)
 
     sorted_events = sorted(events, key=lambda e: e["start"])
-    flask.g.events = sorted_events
+    flask.session['events'] = sorted_events
 
     return render_template('busytimes.html')
 
