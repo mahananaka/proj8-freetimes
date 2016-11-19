@@ -25,6 +25,7 @@ def test_appt():
     end_as_iso = arrow.get(end,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
     output = Appt.from_iso_date(start_as_iso,end_as_iso,decr)
     
+    print("{}    {}".format(output.start_isoformat(),start_as_iso))
     assert output.start_isoformat() == start_as_iso
     assert output.end_isoformat() == end_as_iso
     
