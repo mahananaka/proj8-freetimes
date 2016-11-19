@@ -57,12 +57,12 @@ def test_same_date():
     """
     sample = "11/15/2016"
     test_input1 = arrow.get(sample,"MM/DD/YYYY").replace(tzinfo=tz.tzlocal()).isoformat()
-    test_input2 = test_input1.replace(days=+1).isoformat()
+    test_input2 = arrow.get(test_input1).replace(days=+1).isoformat()
 
     assert same_date(test_input1,test_input2) == False
     assert same_date(test_input1,test_input1) == True
     assert same_date(test_input2,test_input2) == True
-    assert same_date(test_input1,test_input1.replace(hours=6).isoformat()) == True
+    assert same_date(test_input1,test_input1.replace(hours=+6).isoformat()) == True
 
 def test_combine_date_time():
     """
@@ -74,6 +74,6 @@ def test_combine_date_time():
     a_time = "11/20/2016 1:30pm" #but on a different date
     test_input1 = arrow.get(a_date,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
     test_input2 = arrow.get(a_time,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
-    desired_output = arrow.get("11/15/2016 1:30pm").replace(tzinfo=tz.tzlocal()).isoformat()
+    desired_output = arrow.get("11/15/2016 1:30pm","MM/DD/YYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
 
     assert combine_date_time(test_input1,test_input2) == desired_output
