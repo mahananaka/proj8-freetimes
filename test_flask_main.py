@@ -6,14 +6,14 @@ import arrow # Replacement for datetime, based on moment.js
 import datetime # But we still need time
 from dateutil import tz  # For interpreting local times
 
-# module we are testing
-from flask_main import interpret_time
-from flask_main import interpret_date
-from flask_main import in_time_frame
+# modules we are testing
+from flask_main import interpret_time, interpret_date, in_time_frame
+from flask_main import same_date, combine_date_time
+from agenda import Appt, Agenda
 
 def test_interpret_time():
     """
-    Testing interpret time function
+    Testing interspret time function
     """
 
     sample = "11:20pm"
@@ -47,3 +47,33 @@ def test_in_time_frame():
     assert in_time_frame(start,end,interpret_time("10:00am",fmt),interpret_time("12:00pm",fmt)) == True
     assert in_time_frame(start,end,interpret_time("12:00pm",fmt),interpret_time("12:30pm",fmt)) == True
     assert in_time_frame(start,end,interpret_time("11:00am",fmt),interpret_time("1:00pm",fmt)) == True
+
+"""
+Everything below here is the new tests added for proj8
+"""
+def test_same_date():
+    """
+    Testing same_date function
+    """
+    sample = "11/15/2016"
+    test_input1 = arrow.get(sample,"MM/DD/YYYY").replace(tzinfo=tz.tzlocal()).isoformat()
+    test_input2 = test_input1.replace(days=+1).isoformat()
+
+    assert same_date(test_input1,test_input2) == False
+    assert same_date(test_input1,test_input1) == True
+    assert same_date(test_input2,test_input2) == True
+    assert same_date(test_input1,test_input1.replace(hours=6).isoformat()) == True
+
+def test_combine_date_time():
+    """
+    Testing combine_date_time()
+    This should take an arrow date and time object and mash them together
+    """
+
+    a_date = "11/15/2016 8:15am"
+    a_time = "11/20/2016 1:30pm" #but on a different date
+    test_input1 = arrow.get(a_date,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
+    test_input2 = arrow.get(a_time,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
+    desired_output = arrow.get("11/15/2016 1:30pm").replace(tzinfo=tz.tzlocal()).isoformat()
+
+    assert combine_date_time(test_input1,test_input2) == desired_output

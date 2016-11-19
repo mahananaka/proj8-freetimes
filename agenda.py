@@ -49,6 +49,7 @@ class Appt:
         self.desc = desc
         return
 
+    #added this class method to make Appt from an iso formated date time.
     @classmethod
     def from_iso_date(cls, start, finish, desc):
         begin = dt.parse(start)
@@ -60,36 +61,37 @@ class Appt:
         result = Appt(begin.date(), begin.time(), end.time(), desc)
         return result
 
-    # @classmethod
-    # def from_string(cls, txt):
-    #     """Factory parses a string to create an Appt"""
-    #     fields = txt.split("|")
-    #     if len(fields) != 2:
-    #         raise ValueError("Appt literal requires exactly one '|' before description")
-    #     timespec = fields[0].strip()
-    #     desc = fields[1].strip()
-    #     fields = timespec.split()
-    #     if len(fields) != 3:
-    #         raise ValueError("Appt literal must start with date, time, time, separated by blanks")
-    #     appt_date_text = fields[0]
-    #     appt_begin_text = fields[1]
-    #     appt_end_text = fields[2]
-    #     fields = appt_date_text.split(".")
-    #     try:
-    #         year = int(fields[0].strip())
-    #         month = int(fields[1].strip())
-    #         day = int(fields[2].strip())
-    #     except:
-    #         raise ValueError("Date in Appt literal should be 9999.99.99 (Year.Month.Day)")
+    @classmethod
+    def from_string(cls, txt):
+        """Factory parses a string to create an Appt"""
+        fields = txt.split("|")
+        if len(fields) != 2:
+            raise ValueError("Appt literal requires exactly one '|' before description")
+        timespec = fields[0].strip()
+        desc = fields[1].strip()
+        fields = timespec.split()
+        if len(fields) != 3:
+            raise ValueError("Appt literal must start with date, time, time, separated by blanks")
+        appt_date_text = fields[0]
+        appt_begin_text = fields[1]
+        appt_end_text = fields[2]
+        fields = appt_date_text.split(".")
+        try:
+            year = int(fields[0].strip())
+            month = int(fields[1].strip())
+            day = int(fields[2].strip())
+        except:
+            raise ValueError("Date in Appt literal should be 9999.99.99 (Year.Month.Day)")
 
-    #     ### 
-    #     date = datetime.date(year,month,day)
-    #     begin = datetime.datetime.strptime(appt_begin_text, "%H:%M").time()
-    #     end =   datetime.datetime.strptime(appt_end_text, "%H:%M").time()
+        ### 
+        date = datetime.date(year,month,day)
+        begin = datetime.datetime.strptime(appt_begin_text, "%H:%M").time()
+        end =   datetime.datetime.strptime(appt_end_text, "%H:%M").time()
 
-    #     result = Appt(date, begin, end, desc)
-    #     return result
+        result = Appt(date, begin, end, desc)
+        return result
 
+    #added two methods to get the start and end datetime outputted as iso format.
     def start_isoformat(self):
         return self.begin.isoformat()
         
@@ -200,29 +202,29 @@ class Agenda:
         """An empty agenda."""
         self.appts = [ ]
         
-    # @classmethod
-    # def from_file(cls, f):
-    #     """Factory: Read an agenda from a file.
+    @classmethod
+    def from_file(cls, f):
+        """Factory: Read an agenda from a file.
         
-    #     Arguments: 
-    #         f:  A file object (as returned by io.open) or
-    #            an object that emulates a file (like stringio). 
-    #     returns: 
-    #         An Agenda object
-    #     """
-    #     agenda = cls()
-    #     for line in f:
-    #         line = line.strip()
-    #         if line == "" or line.startswith("#"):
-    #             # Skip blank lines and comments
-    #             pass
-    #         else: 
-    #             try: 
-    #                 agenda.append(Appt.from_string(line))
-    #             except ValueError as err: 
-    #                 print("Failed on line: ", line)
-    #                 print(err)
-    #     return agenda
+        Arguments: 
+            f:  A file object (as returned by io.open) or
+               an object that emulates a file (like stringio). 
+        returns: 
+            An Agenda object
+        """
+        agenda = cls()
+        for line in f:
+            line = line.strip()
+            if line == "" or line.startswith("#"):
+                # Skip blank lines and comments
+                pass
+            else: 
+                try: 
+                    agenda.append(Appt.from_string(line))
+                except ValueError as err: 
+                    print("Failed on line: ", line)
+                    print(err)
+        return agenda
 
     def append(self,appt):
         """Add an Appt to the agenda."""
@@ -231,7 +233,7 @@ class Agenda:
     # def merge_agenda(self, other):
     #     for appt in other.appts:
     #         self.append(appt)
-        
+
     #     self.appts.sort(lambda ap: ap.begin)
 
 
@@ -387,7 +389,9 @@ class Agenda:
 #  Self-test invoked when module is run
 #  as main program. 
 #########################
-    
+
+# Commented out all test cases. I am using nose to do the testing in another files
+
 # from test_harness import *
 # import io
 # def selftest_appt():
