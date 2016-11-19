@@ -23,7 +23,7 @@ def test_appt():
     decr = "Test Appt"
     start_as_iso = arrow.get(start,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
     end_as_iso = arrow.get(end,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
-    output = Appt.from_iso_date(start_as_iso.isoformat(),end_as_iso.isoformat(),decr)
+    output = Appt.from_iso_date(start_as_iso,end_as_iso,decr)
     
     assert output.start_isoformat() == start_as_iso
     assert output.end_isoformat() == end_as_iso
