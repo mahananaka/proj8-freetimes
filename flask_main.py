@@ -241,7 +241,7 @@ def combine_date_time(arw_date, arw_time):
     Combines and arrow date and time
     """
     output = datetime.datetime.combine(arw_date.date(),arw_time.time())
-    return output.isoformat()
+    return output.replace(tzinfo=tz.tzlocal()).isoformat()
 
 def next_day(isotext):
     """
