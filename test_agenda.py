@@ -19,11 +19,12 @@ def test_appt():
     Testing intrepret_date function
     """
     start = "11/15/2016 5:42am"
-    end = "11/16/2016 6:00pm"
+    end = "11/15/2016 6:00pm"
     decr = "Test Appt"
     start_as_iso = arrow.get(start,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
     end_as_iso = arrow.get(end,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
+    output = Appt.from_iso_date(start_as_iso.isoformat(),end_as_iso.isoformat(),decr)
     
-    assert Appt.from_iso_date(start_as_iso,end_as_iso,decr)
-    #assert Appt.from_iso_date(sample) == arw_output #text default value for format
+    assert output.start_isoformat() == start_as_iso
+    assert output.end_isoformat() == end_as_iso
     
