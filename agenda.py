@@ -20,6 +20,7 @@
 
 import datetime
 import dateutil.parser as dt
+from dateutil import tz
 class Appt:
 
     """
@@ -98,10 +99,10 @@ class Appt:
 
     #added two methods to get the start and end datetime outputted as iso format.
     def start_isoformat(self):
-        return self.begin.isoformat()
+        return self.begin.replace(tzinfo=tz.tzlocal()).isoformat()
         
     def end_isoformat(self):
-        return self.end.isoformat()
+        return self.end.replace(tzinfo=tz.tzlocal()).isoformat()
 
     def __lt__(self, other):
         """Does this appointment finish before other begins?
