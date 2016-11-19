@@ -1,12 +1,12 @@
-# proj7-Gcal
-First part of the MeetUp term project we are working on.
+# proj8-Freetimes
+Sec part of the MeetUp term project we are working on.
 
 ## Author
 Jared Paeschke, contact me via paeschk@cs.uoregon.edu
 
 ## What is here
 
-This application is just the first part of the larger MeetUp project we
+This application is just part of the larger MeetUp project we
 are building in 16F CIS322 class.
 
 ## How to Install
@@ -15,7 +15,7 @@ When writing and testing this program, the test machine was a Raspberry Pi 3 run
 This is the best sure fire way that the install will go smoothly. However you should have success 
 as long as you have bash and make on your server machine. All but step four is done from command line.
 
-1. git clone https://github.com/mahananaka/proj7-Gcal.git < install directory >
+1. git clone https://github.com/mahananaka/proj8-freetimes.git < install directory >
 2. cd < install directory >
 3. bash ./configure
 4. You will need to create a folder called secrets. Inside of secrets folder you will need two files
@@ -41,8 +41,12 @@ you allow access then google will return you to the page you were at and now you
 are listed. Selected which ones you want to be considered when determining busy times and hit the button below.
 
 Finally you are redirected to an events page which will list all events that are considered to block your time
-and thus are busy times for you.
+and thus are busy times for you. Here you can deselect any appointments that can be considered reschedulable or not
+important. Anything deselected will be ignored when determining free times. Once done press the button to get free 
+times.
+
+The last page displays a two column list of dates with the time ranges that are free and the time ranges that are busy.
 
 ## Testing
 
-Some tests were written for the program. You can see these tests in test_flask_main.py. If you wish to run these tests using nose, a nosetests recipe exists in the make file. From command line you can type `make test` to do the nosetests.
+Some tests were written for the program. You can see these tests in test_flask_main.py and test_agenda. If you wish to run these tests using nose, a nosetests recipe exists in the make file. From command line you can type `make test` to do the nosetests.
