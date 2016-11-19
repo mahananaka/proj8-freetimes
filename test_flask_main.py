@@ -76,4 +76,6 @@ def test_combine_date_time():
     test_input2 = arrow.get(a_time,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal())
     desired_output = arrow.get("11/15/2016 1:30pm","MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
 
+    print(desired_output)
+    print(combine_date_time(test_input1,test_input2))
     assert combine_date_time(test_input1,test_input2) == desired_output
