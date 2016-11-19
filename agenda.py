@@ -10,6 +10,11 @@
    a new Agenda whose Appts are periods that are in the overlap
    of Appts in the first and second Agenda.
    
+   Modified:
+   By Jared Paeschke for use in CIS 322 project
+   Appt: added from_iso_date
+         added start_isoformat
+         added end_isoformat
 
 """
 
@@ -230,20 +235,12 @@ class Agenda:
         """Add an Appt to the agenda."""
         self.appts.append(appt)
 
-    # def merge_agenda(self, other):
-    #     for appt in other.appts:
-    #         self.append(appt)
-
-    #     self.appts.sort(lambda ap: ap.begin)
-
-
-
-    def get_date(self):
-        """Returns the date of the first appt in the agenda"""
-        if len(self.appts) < 1:
-            return None
-        else:
-            return self.appts[0].begin.isoformat()
+    # def get_date(self):
+    #     """Returns the date of the first appt in the agenda"""
+    #     if len(self.appts) < 1:
+    #         return None
+    #     else:
+    #         return self.appts[0].begin.isoformat()
 
     def intersect(self,other,desc=""): 
         """Return a new agenda containing appointments
