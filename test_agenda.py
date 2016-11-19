@@ -18,13 +18,17 @@ def test_appt():
     """
     Testing intrepret_date function
     """
+
+    # Note: the inputs must have the same day, this is by design and if we were to pass
+    # a start and end with different dates we'd get a ValueError exception.
     start = "11/15/2016 5:42am"
     end = "11/15/2016 6:00pm"
     decr = "Test Appt"
     start_as_iso = arrow.get(start,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
     end_as_iso = arrow.get(end,"MM/DD/YYYY h:mma").replace(tzinfo=tz.tzlocal()).isoformat()
-    output = Appt.from_iso_date(start_as_iso,end_as_iso,decr)
+    output = Appt.from_iso_date(start_as_iso,end_as_iso,decr) 
     
+
     print("{}    {}".format(output.start_isoformat(),start_as_iso))
     assert output.start_isoformat() == start_as_iso
     assert output.end_isoformat() == end_as_iso
